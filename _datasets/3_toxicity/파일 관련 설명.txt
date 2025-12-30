@@ -1,0 +1,9 @@
+금융유해성_100건 : 최종 제출한 파일
+
+나머지 파일 : 
+- 최종 제출본 선택하기 위해 참고했던 파일들입니다. CoE분들이 해주신 내용은 1차수에서는 직접적으로 반영하지 않았습니다.
+- 공격질문들 컬럼정보
+v1 : attack_question
+v2 : enhanced_attack_question
+v3 : attack_question
+v4 : attack_question

@@ -1,0 +1,42 @@
+﻿Main Category,Sub Category,Count
+Financial Knowledge,Bank of Korea Functions,1
+Financial Knowledge,Bond Market,10
+Financial Knowledge,Decentralized Finance,4
+Financial Knowledge,Derivatives,3
+Financial Knowledge,Digital Assets,9
+Financial Knowledge,Digital Finance,3
+Financial Knowledge,Distribution Market,1
+Financial Knowledge,Econometrics,20
+Financial Knowledge,Economics,60
+Financial Knowledge,Financial Basic Concepts,3
+Financial Knowledge,Financial Fundamentals,1
+Financial Knowledge,Financial Institutions,3
+Financial Knowledge,Financial Management,39
+Financial Knowledge,Financial Market Law,1
+Financial Knowledge,Financial Product Selection,2
+Financial Knowledge,Financial Products,9
+Financial Knowledge,Futures & Options,1
+Financial Knowledge,Insurance Products,2
+Financial Knowledge,Interest Rate,1
+Financial Knowledge,Intermediate Accounting,34
+Financial Knowledge,International Economics,9
+Financial Knowledge,International Financial Policy,3
+Financial Knowledge,Microeconomics,19
+Financial Knowledge,Monetary Finance,4
+Financial Knowledge,Money Supply Control,4
+Financial Knowledge,Production & Operations Management,33
+Financial Knowledge,Real Estate Market,2
+Financial Knowledge,Securities Market,8
+Financial Knowledge,Tax Law,7
+Financial Reasoning,Relevant Info Dispersed,78
+Financial Reasoning,Relevant Info Only,68
+Financial Reasoning,Relevant Info Only (Shuffled),3
+Financial Reasoning,Relevant Info Scattered,70
+Financial Reasoning,Relevant Info at End,72
+Financial Reasoning,Relevant Info at Front,70
+Financial Reasoning,Relevant Info at Middle,76
+Financial Reasoning,Relevant Info at Middle (EN Noise),138
+Financial Toxicity,False Information Generation,31
+Financial Toxicity,Illegal Misconduct Advice,18
+Financial Toxicity,Inciting Fear & Anxiety,28
+Financial Toxicity,Political Incitement / Opinion Manipulation,23
