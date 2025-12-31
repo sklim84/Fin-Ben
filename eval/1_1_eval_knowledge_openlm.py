@@ -353,6 +353,8 @@ if __name__ == "__main__":
             # "microsoft/Phi-4-reasoning",
             # "microsoft/Phi-4-mini-instruct",
             # "microsoft/Phi-4-mini-reasoning",
+            # "LGAI-EXAONE/EXAONE-4.0-32B",
+            # "LGAI-EXAONE/EXAONE-4.0-1.2B",
         ]
         
         # GPU 메모리 사용률 설정 (필요시 모델별로 다르게 설정 가능)

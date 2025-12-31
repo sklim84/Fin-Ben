@@ -13,6 +13,16 @@ import shutil
 from tqdm import tqdm
 from typing import Optional
 
+# HuggingFace 토큰 설정 (gated repository 접근용)
+# 환경 변수에 토큰이 없으면 기본 토큰 사용
+if "HF_TOKEN" not in os.environ and "HUGGINGFACE_HUB_TOKEN" not in os.environ:
+    default_token = "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"
+    os.environ["HF_TOKEN"] = default_token
+    os.environ["HUGGINGFACE_HUB_TOKEN"] = default_token
+    print("✓ HuggingFace 토큰 설정 완료 (기본 토큰 사용)")
+else:
+    print("✓ HuggingFace 토큰 확인됨 (환경 변수에서 로드)")
+
 # HuggingFace 캐시를 workspace로 설정 (모듈 로드 전에 설정해야 함)
 workspace_cache_dir = "/workspace/.cache/huggingface"
 os.makedirs(workspace_cache_dir, exist_ok=True)
@@ -318,25 +328,27 @@ if __name__ == "__main__":
             # "mistralai/Ministral-3-14B-Instruct-2512",    
             # "mistralai/Ministral-3-8B-Instruct-2512", 
             # "mistralai/Ministral-3-3B-Instruct-2512", 
-            "Qwen/Qwen3-30B-A3B-Instruct-2507", 
-            "Qwen/Qwen3-30B-A3B-Thinking-2507", 
-            "Qwen/Qwen3-4B-Instruct-2507",
-            "Qwen/Qwen3-4B-Thinking-2507", 
-            "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-            "kakaocorp/kanana-2-30b-a3b-instruct",
-            "kakaocorp/kanana-1.5-15.7b-a3b-instruct",
-            "kakaocorp/kanana-1.5-8b-instruct-2505",
-            "kakaocorp/kanana-1.5-2.1b-instruct-2505",
-            "google/gemma-3-27b-it",
-            "google/gemma-3-12b-it",
-            "google/gemma-3-4b-it",
-            "google/gemma-3-1b-it",
-            "google/gemma-3-270m-it",
-            "microsoft/Phi-4-reasoning",
-            "microsoft/Phi-4-mini-instruct",
-            "microsoft/Phi-4-mini-reasoning",
-            "openai/gpt-oss-120b",
-            "openai/gpt-oss-20b",
+            # "Qwen/Qwen3-30B-A3B-Instruct-2507", 
+            # "Qwen/Qwen3-30B-A3B-Thinking-2507", 
+            # "Qwen/Qwen3-4B-Instruct-2507",
+            # "Qwen/Qwen3-4B-Thinking-2507", 
+            # "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+            # "kakaocorp/kanana-2-30b-a3b-instruct",
+            # "kakaocorp/kanana-1.5-15.7b-a3b-instruct",
+            # "kakaocorp/kanana-1.5-8b-instruct-2505",
+            # "kakaocorp/kanana-1.5-2.1b-instruct-2505",
+            # "google/gemma-3-27b-it",
+            # "google/gemma-3-12b-it",
+            # "google/gemma-3-4b-it",
+            # "google/gemma-3-1b-it",
+            # "google/gemma-3-270m-it",
+            # "microsoft/Phi-4-reasoning",
+            # "microsoft/Phi-4-mini-instruct",
+            # "microsoft/Phi-4-mini-reasoning",
+            # "openai/gpt-oss-120b",
+            # "openai/gpt-oss-20b",
+            "LGAI-EXAONE/EXAONE-4.0-32B",
+            "LGAI-EXAONE/EXAONE-4.0-1.2B",
         ]
         
         # GPU 메모리 사용률 설정 (필요시 모델별로 다르게 설정 가능)

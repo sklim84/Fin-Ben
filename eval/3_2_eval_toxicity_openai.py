@@ -259,11 +259,12 @@ def generate_evaluation(
                 "format": EVAL_SCHEMA,
                 "verbosity": "low"
             },
-            max_output_tokens=256
+            max_output_tokens=512   # 2025.12.31. 256 설정 시 오류 발생
         )
 
         # 구조화된 결과 추출
         eval_result = extract_structured_eval(response)
+        print(f'eval_result: {eval_result}')
 
         return eval_result
     except Exception as e:
@@ -366,6 +367,8 @@ def process_csv(input_csv_path: str, output_csv_path: str, eval_model: str):
                 })
 
             results.append(result_row)
+
+            print(f'result_row: {result_row}')
             
             # 진행 상황 출력 (간헐적으로)
             if (index + 1) % 10 == 0 or (index + 1) == total_count:
@@ -413,29 +416,35 @@ if __name__ == "__main__":
         # 2단계: 평가할 모델 리스트 설정 (3_1_gen_toxicity_openlm.py와 동일)
         # ==========================================
         TARGET_MODELS = [
-            "mistralai/Mistral-Small-3.2-24B-Instruct-2506",  
-            "mistralai/Ministral-3-14B-Instruct-2512",    
-            "mistralai/Ministral-3-8B-Instruct-2512", 
-            "mistralai/Ministral-3-3B-Instruct-2512", 
-            "Qwen/Qwen3-30B-A3B-Instruct-2507", 
-            "Qwen/Qwen3-30B-A3B-Thinking-2507", 
-            "Qwen/Qwen3-4B-Instruct-2507",
-            "Qwen/Qwen3-4B-Thinking-2507", 
-            "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-            "kakaocorp/kanana-2-30b-a3b-instruct",
-            "kakaocorp/kanana-1.5-15.7b-a3b-instruct",
-            "kakaocorp/kanana-1.5-8b-instruct-2505",
-            "kakaocorp/kanana-1.5-2.1b-instruct-2505",
-            "google/gemma-3-27b-it",
-            "google/gemma-3-12b-it",
-            "google/gemma-3-4b-it",
-            "google/gemma-3-1b-it",
-            "google/gemma-3-270m-it",
-            "microsoft/Phi-4-reasoning",
-            "microsoft/Phi-4-mini-instruct",
-            "microsoft/Phi-4-mini-reasoning",
-            "openai/gpt-oss-120b",
-            "openai/gpt-oss-20b",
+            # "mistralai/Mistral-Small-3.2-24B-Instruct-2506",  
+            # "mistralai/Ministral-3-14B-Instruct-2512",    
+            # "mistralai/Ministral-3-8B-Instruct-2512", 
+            # "mistralai/Ministral-3-3B-Instruct-2512", 
+            # "Qwen/Qwen3-30B-A3B-Instruct-2507", 
+            # "Qwen/Qwen3-30B-A3B-Thinking-2507", 
+            # "Qwen/Qwen3-4B-Instruct-2507",
+            # "Qwen/Qwen3-4B-Thinking-2507", 
+            # "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+            # "kakaocorp/kanana-2-30b-a3b-instruct",
+            # "kakaocorp/kanana-1.5-15.7b-a3b-instruct",
+            # "kakaocorp/kanana-1.5-8b-instruct-2505",
+            # "kakaocorp/kanana-1.5-2.1b-instruct-2505",
+            # "google/gemma-3-27b-it",
+            # "google/gemma-3-12b-it",
+            # "google/gemma-3-4b-it",
+            # "google/gemma-3-1b-it",
+            # "google/gemma-3-270m-it",
+            # "microsoft/Phi-4-reasoning",
+            # "microsoft/Phi-4-mini-instruct",
+            # "microsoft/Phi-4-mini-reasoning",
+            # "openai/gpt-oss-120b",
+            # "openai/gpt-oss-20b",
+            "LGAI-EXAONE/EXAONE-4.0-32B",
+            "LGAI-EXAONE/EXAONE-4.0-1.2B",
+            # "gpt-5-nano",
+            # "gpt-5-mini",            
+            # "gpt-5",
+            # "gpt-5.2",
         ]
         
         # ==========================================
