@@ -69,10 +69,13 @@ E. {E}
 
 # =================================
 # 모델별 reasoning 설정
+# - gpt-5.2 모델은 none 이외 설정시 해당 토큰에서 nonetype 반환 발생
+# - gpt-5.2 이외 모델은 minimal 이상 설정 시 nonetype 반환 발생
+# - default effot : medium
 # =================================
 def get_reasoning_config(model_name: str):
     if model_name.startswith("gpt-5.2"):
-        return {"effort": "none"}
+        return {"effort": "none"} 
     else:
         return {"effort": "minimal"}
 
@@ -137,7 +140,7 @@ def generate_answer_single(
                 print(f"500 오류 재시도 실패 (최종)")
                 raise
             sleep_time = 2 ** attempt + random.uniform(0, 0.5)
-            print(f"  ⚠️ 500 서버 오류, {sleep_time:.2f}s 후 재시도 ({attempt+1}/{max_retries})")
+            print(f"  500 서버 오류, {sleep_time:.2f}s 후 재시도 ({attempt+1}/{max_retries})")
             time.sleep(sleep_time)
 
         except Exception as e:
@@ -214,10 +217,10 @@ def process_csv(
 if __name__ == "__main__":
 
     TARGET_MODELS = [
-        # "gpt-5-mini",
-        "gpt-5-nano",
+         "gpt-5.2",
         # "gpt-5",
-        # "gpt-5.2",
+        # "gpt-5-mini",
+        # "gpt-5-nano",
     ]
 
     MAX_OUTPUT_TOKENS = 32
@@ -242,7 +245,7 @@ if __name__ == "__main__":
             model_safe = model_name.replace("/", "_").replace(".", "_")
             results_dir = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
-                "_results"
+                "_results/1_fin_knowledge"
             )
             os.makedirs(results_dir, exist_ok=True)
 

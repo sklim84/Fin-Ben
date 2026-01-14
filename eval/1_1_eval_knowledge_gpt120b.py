@@ -243,7 +243,7 @@ if __name__ == "__main__":
     BENCHMARK_LIST = ["1_fin_knowledge.csv"]
 
     # 출력 디렉토리: eval/_results/
-    OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results")
+    OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results/1_fin_knowledge")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     sampling_params = SamplingParams(

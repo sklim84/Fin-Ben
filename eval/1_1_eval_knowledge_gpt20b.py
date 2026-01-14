@@ -306,7 +306,7 @@ if __name__ == "__main__":
             input_csv_path = os.path.join(file_path, benchmark)
 
             model_name_safe = model_name.replace("/", "_").replace(":", "_")
-            results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results")
+            results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results/1_fin_knowledge")
             os.makedirs(results_dir, exist_ok=True)
 
             output_csv_path = os.path.join(

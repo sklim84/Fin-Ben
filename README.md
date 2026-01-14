@@ -33,6 +33,7 @@ Fin-Ben/
 **스크립트**:
 - `1_1_eval_knowledge_openlm.py`: vLLM을 사용한 모델 응답 생성
 - `1_1_eval_knowledge_openai.py`: OpenAI API를 사용한 모델 응답 생성
+- `1_1_eval_knowledge_claude.py`: Anthropic Claude API를 사용한 모델 응답 생성 (Structured Outputs 사용)
 - `1_1_eval_knowledge_gpt20b.py`: GPT-OSS-20B 모델 전용 평가 (Transformers 직접 사용)
 - `1_1_eval_knowledge_gpt120b.py`: GPT-OSS-120B 모델 전용 평가 (vLLM 사용)
 - `1_2_stats_eval_knowledge.py`: 평가 결과 통계 계산 및 정답률 분석
@@ -58,6 +59,7 @@ Fin-Ben/
 **스크립트**:
 - `2_1_gen_reasoning_openlm.py`: vLLM을 사용한 추론 응답 생성
 - `2_1_gen_reasoning_openai.py`: OpenAI API를 사용한 추론 응답 생성
+- `2_1_gen_reasoning_claude.py`: Anthropic Claude API를 사용한 추론 응답 생성
 - `2_2_eval_reasoning_openai.py`: OpenAI API를 사용한 추론 응답 평가
 - `2_3_stats_eval_reasoning.py`: 평가 결과 통계 계산
 
@@ -86,6 +88,7 @@ Fin-Ben/
 **스크립트**:
 - `3_1_gen_toxicity_openlm.py`: vLLM을 사용한 유해성 응답 생성
 - `3_1_gen_toxicity_openai.py`: OpenAI API를 사용한 유해성 응답 생성
+- `3_1_gen_toxicity_claude.py`: Anthropic Claude API를 사용한 유해성 응답 생성
 - `3_2_eval_toxicity_openai.py`: OpenAI API를 사용한 유해성 평가
 - `3_3_stats_eval_toxicity.py`: 평가 결과 통계 계산
 
@@ -115,14 +118,17 @@ Fin-Ben/
 # 금융 지식 평가
 python eval/1_1_eval_knowledge_openlm.py      # vLLM 모델용
 python eval/1_1_eval_knowledge_openai.py      # OpenAI API 모델용
+python eval/1_1_eval_knowledge_claude.py      # Anthropic Claude API 모델용
 
 # 추론 능력 평가
 python eval/2_1_gen_reasoning_openlm.py      # vLLM 모델용
 python eval/2_1_gen_reasoning_openai.py      # OpenAI API 모델용
+python eval/2_1_gen_reasoning_claude.py      # Anthropic Claude API 모델용
 
 # 유해성 평가
 python eval/3_1_gen_toxicity_openlm.py       # vLLM 모델용
 python eval/3_1_gen_toxicity_openai.py       # OpenAI API 모델용
+python eval/3_1_gen_toxicity_claude.py      # Anthropic Claude API 모델용
 ```
 
 ### 2단계: 응답 평가 (추론, 유해성)
@@ -166,6 +172,12 @@ python eval/3_3_stats_eval_toxicity.py
 - Structured Outputs (JSON Schema) 사용
 - Responses API 활용
 
+**Anthropic Claude API 기반 평가** (`*_claude.py`):
+- Claude Sonnet 4.5, Opus 4.5, Haiku 4.5 지원
+- Structured Outputs 사용 (금융 지식 평가)
+- Messages API 활용
+- 프롬프트 기반 응답 생성 (추론, 유해성 평가)
+
 **Transformers 직접 사용** (`*_gpt*.py`):
 - GPT-OSS 모델 전용
 - device_map="auto"로 Multi-GPU 지원
@@ -175,7 +187,8 @@ python eval/3_3_stats_eval_toxicity.py
 
 **금융 지식**:
 - 객관식 답변 (A~E)
-- LogitsProcessor로 출력 제한
+- LogitsProcessor로 출력 제한 (vLLM)
+- Structured Outputs로 출력 제한 (OpenAI/Claude API)
 - 정답 비교 기반 정확도 계산
 
 **추론 능력**:
@@ -194,7 +207,8 @@ python eval/3_3_stats_eval_toxicity.py
 
 - `vllm`: vLLM 기반 모델 로드용
 - `transformers`: Transformers 직접 사용용
-- `openai`: OpenAI API 사용용
+- `openai`: OpenAI API 사용용 (>=2.14.x)
+- `anthropic`: Anthropic Claude API 사용용 (>=0.75.0, Structured Outputs 지원)
 - `pandas`: 데이터 처리용
 - `tqdm`: 진행 상황 표시용
 
@@ -207,6 +221,10 @@ python eval/3_3_stats_eval_toxicity.py
 **OpenAI API 키**:
 - `.env` 파일에 `OPENAI_API_KEY` 설정
 - OpenAI API 평가용
+
+**Anthropic API 키**:
+- `.env` 파일에 `ANTHROPIC_API_KEY` 설정
+- Claude API 평가용
 
 ### 캐시 설정
 
@@ -235,5 +253,6 @@ eval/_results/
 
 1. **모델 호환성**: 일부 Vision/Multimodal 모델은 vLLM에서 지원하지 않을 수 있습니다.
 2. **메모리 관리**: 대형 모델의 경우 GPU 메모리 사용률을 조정해야 할 수 있습니다.
-3. **API 비용**: OpenAI API를 사용하는 평가는 API 사용 비용이 발생합니다.
+3. **API 비용**: OpenAI API 및 Anthropic Claude API를 사용하는 평가는 API 사용 비용이 발생합니다.
 4. **실행 시간**: 대량의 모델 평가는 상당한 시간이 소요될 수 있습니다.
+5. **Claude API Structured Outputs**: 금융 지식 평가는 Structured Outputs를 사용하며, anthropic SDK >=0.75.0이 필요합니다.

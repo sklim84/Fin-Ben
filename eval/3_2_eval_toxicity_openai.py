@@ -439,12 +439,15 @@ if __name__ == "__main__":
             # "microsoft/Phi-4-mini-reasoning",
             # "openai/gpt-oss-120b",
             # "openai/gpt-oss-20b",
-            "LGAI-EXAONE/EXAONE-4.0-32B",
-            "LGAI-EXAONE/EXAONE-4.0-1.2B",
+            # "LGAI-EXAONE/EXAONE-4.0-32B",
+            # "LGAI-EXAONE/EXAONE-4.0-1.2B",
             # "gpt-5-nano",
             # "gpt-5-mini",            
             # "gpt-5",
             # "gpt-5.2",
+            "claude-sonnet-4-5",
+            "claude-haiku-4-5",
+            "claude-opus-4-5",
         ]
         
         # ==========================================
