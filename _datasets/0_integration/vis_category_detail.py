@@ -29,34 +29,29 @@ category_translation = {
     # 회계 관련
     '중급회계': 'Intermediate Accounting',
     '세법': 'Tax Law',
-    '법인세회계': 'Corporate Tax Accounting',
     
     # 경제학 관련
-    '경제학': 'Economics',
+    # '경제학': 'Economics',  # 재분류됨: 경제학 → 거시경제학/국제경제학/화폐금융
     '미시경제학': 'Microeconomics',
-    '미시경제': 'Microeconomics',
+    # '미시경제': 'Microeconomics',  # 통합됨: 미시경제 → 미시경제학
     '거시경제학': 'Macroeconomics',
     '국제경제학': 'International Economics',
     '계량경제': 'Econometrics',
     
     # 재무관리 관련
     '재무관리': 'Financial Management',
-    '기업가치평가': 'Corporate Valuation',
-    '자본구조': 'Capital Structure',
-    '배당': 'Dividend',
-    '레버리지': 'Leverage',
     
     # 금융시장 관련
     '금융상품': 'Financial Products',
-    '금융상품 선택기준': 'Financial Product Selection',
+    # '금융상품 선택기준': 'Financial Product Selection',  # 통합됨: 금융상품 → 금융상품
     '금융의 기초': 'Financial Fundamentals',
-    '금융의 기초개념': 'Financial Basic Concepts',
+    # '금융의 기초개념': 'Financial Basic Concepts',  # 통합됨: 금융의 기초개념 → 금융의 기초
     '금융기관': 'Financial Institutions',
-    '금융시장 법률': 'Financial Market Law',
-    '금리': 'Interest Rate',
+    # '금융시장 법률': 'Financial Market Law',  # 통합됨: 금융시장 법률 → 금융기관
+    # '금리': 'Interest Rate',  # 통합됨: 금리 → 화폐금융
     '화폐금융': 'Monetary Finance',
-    '통화량조절': 'Money Supply Control',
-    '한국은행의 기능': 'Bank of Korea Functions',
+    # '통화량조절': 'Money Supply Control',  # 통합됨: 통화량조절 → 화폐금융
+    # '한국은행의 기능': 'Bank of Korea Functions',  # 통합됨: 한국은행의 기능 → 화폐금융
     
     # 시장 관련
     '증권시장': 'Securities Market',
@@ -66,12 +61,12 @@ category_translation = {
     
     # 파생상품 관련
     '파생상품': 'Derivatives',
-    '선물옵션': 'Futures & Options',
+    # '선물옵션': 'Futures & Options',  # 통합됨: 선물옵션 → 파생상품
     
     # 디지털 금융 관련
     '디지털 금융': 'Digital Finance',
-    '디지털 자산': 'Digital Assets',
-    '탈 중앙금융': 'Decentralized Finance',
+    # '디지털 자산': 'Digital Assets',  # 통합됨: 디지털 자산 → 디지털 금융
+    # '탈 중앙금융': 'Decentralized Finance',  # 통합됨: 탈 중앙금융 → 디지털 금융
     
     # 기타
     '생산운영관리': 'Production & Operations Management',
