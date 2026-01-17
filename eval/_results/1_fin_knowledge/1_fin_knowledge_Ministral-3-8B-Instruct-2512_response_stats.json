@@ -31,20 +31,12 @@
       "accuracy_percentage": "25.64%"
     },
     {
-      "category": "미시경제",
-      "total": 3,
-      "correct": 1,
-      "wrong": 2,
-      "accuracy": 33.33,
-      "accuracy_percentage": "33.33%"
-    },
-    {
       "category": "미시경제학",
-      "total": 16,
-      "correct": 3,
-      "wrong": 13,
-      "accuracy": 18.75,
-      "accuracy_percentage": "18.75%"
+      "total": 19,
+      "correct": 4,
+      "wrong": 15,
+      "accuracy": 21.05,
+      "accuracy_percentage": "21.05%"
     },
     {
       "category": "계량경제",
@@ -55,36 +47,36 @@
       "accuracy_percentage": "15.00%"
     },
     {
-      "category": "경제학",
-      "total": 60,
-      "correct": 10,
-      "wrong": 50,
-      "accuracy": 16.67,
-      "accuracy_percentage": "16.67%"
+      "category": "거시경제학",
+      "total": 20,
+      "correct": 5,
+      "wrong": 15,
+      "accuracy": 25.0,
+      "accuracy_percentage": "25.00%"
+    },
+    {
+      "category": "국제경제학",
+      "total": 29,
+      "correct": 1,
+      "wrong": 28,
+      "accuracy": 3.45,
+      "accuracy_percentage": "3.45%"
+    },
+    {
+      "category": "화폐금융",
+      "total": 30,
+      "correct": 8,
+      "wrong": 22,
+      "accuracy": 26.67,
+      "accuracy_percentage": "26.67%"
     },
     {
       "category": "디지털 금융",
-      "total": 3,
-      "correct": 1,
-      "wrong": 2,
-      "accuracy": 33.33,
-      "accuracy_percentage": "33.33%"
-    },
-    {
-      "category": "디지털 자산",
-      "total": 9,
-      "correct": 5,
-      "wrong": 4,
-      "accuracy": 55.56,
-      "accuracy_percentage": "55.56%"
-    },
-    {
-      "category": "탈 중앙금융",
-      "total": 4,
-      "correct": 1,
-      "wrong": 3,
-      "accuracy": 25.0,
-      "accuracy_percentage": "25.00%"
+      "total": 16,
+      "correct": 7,
+      "wrong": 9,
+      "accuracy": 43.75,
+      "accuracy_percentage": "43.75%"
     },
     {
       "category": "채권시장",
@@ -111,14 +103,6 @@
       "accuracy_percentage": "12.50%"
     },
     {
-      "category": "금리",
-      "total": 1,
-      "correct": 1,
-      "wrong": 0,
-      "accuracy": 100.0,
-      "accuracy_percentage": "100.00%"
-    },
-    {
       "category": "보험상품",
       "total": 2,
       "correct": 1,
@@ -127,36 +111,20 @@
       "accuracy_percentage": "50.00%"
     },
     {
-      "category": "금융상품 선택기준",
-      "total": 2,
-      "correct": 0,
-      "wrong": 2,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
+      "category": "금융상품",
+      "total": 11,
+      "correct": 1,
+      "wrong": 10,
+      "accuracy": 9.09,
+      "accuracy_percentage": "9.09%"
     },
     {
       "category": "금융기관",
-      "total": 3,
+      "total": 4,
       "correct": 1,
-      "wrong": 2,
-      "accuracy": 33.33,
-      "accuracy_percentage": "33.33%"
-    },
-    {
-      "category": "금융시장 법률",
-      "total": 1,
-      "correct": 0,
-      "wrong": 1,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "category": "금융상품",
-      "total": 9,
-      "correct": 1,
-      "wrong": 8,
-      "accuracy": 11.11,
-      "accuracy_percentage": "11.11%"
+      "wrong": 3,
+      "accuracy": 25.0,
+      "accuracy_percentage": "25.00%"
     },
     {
       "category": "유통시장",
@@ -167,20 +135,20 @@
       "accuracy_percentage": "100.00%"
     },
     {
-      "category": "선물옵션",
-      "total": 1,
+      "category": "파생상품",
+      "total": 4,
       "correct": 0,
-      "wrong": 1,
+      "wrong": 4,
       "accuracy": 0.0,
       "accuracy_percentage": "0.00%"
     },
     {
-      "category": "금융의 기초개념",
-      "total": 3,
-      "correct": 2,
+      "category": "금융의 기초",
+      "total": 4,
+      "correct": 3,
       "wrong": 1,
-      "accuracy": 66.67,
-      "accuracy_percentage": "66.67%"
+      "accuracy": 75.0,
+      "accuracy_percentage": "75.00%"
     },
     {
       "category": "세법",
@@ -197,54 +165,6 @@
       "wrong": 1,
       "accuracy": 50.0,
       "accuracy_percentage": "50.00%"
-    },
-    {
-      "category": "금융의 기초",
-      "total": 1,
-      "correct": 1,
-      "wrong": 0,
-      "accuracy": 100.0,
-      "accuracy_percentage": "100.00%"
-    },
-    {
-      "category": "파생상품",
-      "total": 3,
-      "correct": 0,
-      "wrong": 3,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "category": "화폐금융",
-      "total": 4,
-      "correct": 0,
-      "wrong": 4,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "category": "통화량조절",
-      "total": 4,
-      "correct": 2,
-      "wrong": 2,
-      "accuracy": 50.0,
-      "accuracy_percentage": "50.00%"
-    },
-    {
-      "category": "한국은행의 기능",
-      "total": 1,
-      "correct": 0,
-      "wrong": 1,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "category": "국제경제학",
-      "total": 9,
-      "correct": 1,
-      "wrong": 8,
-      "accuracy": 11.11,
-      "accuracy_percentage": "11.11%"
     }
   ],
   "by_level": [
@@ -463,22 +383,6 @@
       "total": 4,
       "correct": 1,
       "wrong": 3,
-      "accuracy": 25.0,
-      "accuracy_percentage": "25.00%"
-    },
-    {
-      "sub_category": "거시경제학",
-      "total": 20,
-      "correct": 5,
-      "wrong": 15,
-      "accuracy": 25.0,
-      "accuracy_percentage": "25.00%"
-    },
-    {
-      "sub_category": "화폐금융",
-      "total": 20,
-      "correct": 5,
-      "wrong": 15,
       "accuracy": 25.0,
       "accuracy_percentage": "25.00%"
     },
@@ -1039,22 +943,6 @@
       "total": 1,
       "correct": 0,
       "wrong": 1,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "sub_category": "국제경제학",
-      "total": 16,
-      "correct": 0,
-      "wrong": 16,
-      "accuracy": 0.0,
-      "accuracy_percentage": "0.00%"
-    },
-    {
-      "sub_category": "국제",
-      "total": 4,
-      "correct": 0,
-      "wrong": 4,
       "accuracy": 0.0,
       "accuracy_percentage": "0.00%"
     },

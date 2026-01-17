@@ -9,7 +9,52 @@ import pandas as pd
 import os
 import json
 import glob
-from typing import Optional, Dict
+from typing import Optional, Dict, List
+
+
+# =================================
+# 카테고리 번역 딕셔너리 (vis_category_detail.py 참고)
+# =================================
+category_translation = {
+    # 회계 관련
+    '중급회계': 'Intermediate Accounting',
+    '세법': 'Tax Law',
+    
+    # 경제학 관련
+    '미시경제학': 'Microeconomics',
+    '거시경제학': 'Macroeconomics',
+    '국제경제학': 'International Economics',
+    '계량경제': 'Econometrics',
+    
+    # 재무관리 관련
+    '재무관리': 'Financial Management',
+    
+    # 금융시장 관련
+    '금융상품': 'Financial Products',
+    '금융의 기초': 'Financial Fundamentals',
+    '금융기관': 'Financial Institutions',
+    '화폐금융': 'Monetary Finance',
+    
+    # 시장 관련
+    '증권시장': 'Securities Market',
+    '채권시장': 'Bond Market',
+    '부동산시장': 'Real Estate Market',
+    '유통시장': 'Distribution Market',
+    
+    # 파생상품 관련
+    '파생상품': 'Derivatives',
+    
+    # 디지털 금융 관련
+    '디지털 금융': 'Digital Finance',
+    
+    # 기타
+    '생산운영관리': 'Production & Operations Management',
+    '보험상품': 'Insurance Products',
+    '국제금융정책': 'International Financial Policy',
+    
+    # 빈 값 처리
+    '': 'Uncategorized',
+}
 
 
 # =================================
@@ -201,13 +246,157 @@ def print_statistics(stats: Dict):
 
 
 # =================================
+# 모델 순서 정의 (사용자 지정 순서)
+# =================================
+MODEL_ORDER = [
+    'Mistral-Small-3.2-24B-Instruct-2506',
+    'Ministral-3-14B-Instruct-2512',
+    'Ministral-3-8B-Instruct-2512',
+    'Ministral-3-3B-Instruct-2512',
+    'Qwen3-30B-A3B-Instruct-2507',
+    'Qwen3-30B-A3B-Thinking-2507',
+    'Qwen3-4B-Instruct-2507',
+    'Qwen3-4B-Thinking-2507',
+    'DeepSeek-R1-0528-Qwen3-8B',
+    'kanana-2-30b-a3b-instruct',
+    'kanana-1.5-15.7b-a3b-instruct',
+    'kanana-1.5-8b-instruct-2505',
+    'kanana-1.5-2.1b-instruct-2505',
+    'gemma-3-27b-it',
+    'gemma-3-12b-it',
+    'gemma-3-4b-it',
+    'gemma-3-1b-it',
+    'gemma-3-270m-it',
+    'Phi-4-reasoning',
+    'Phi-4-mini-instruct',
+    'Phi-4-mini-reasoning',
+    'gpt-oss-120b',
+    'gpt-oss-20b',
+    'EXAONE-4.0-32B',
+    'EXAONE-4.0-1.2B',
+    'gpt-5.2',
+    'gpt-5',
+    'gpt-5-mini',
+    'gpt-5-nano',
+    'claude-sonnet-4-5-20250929',
+    'claude-haiku-4-5-20251001',
+    'claude-opus-4-5-20251101',
+    'gemini-3-pro-preview',
+    'gemini-3-flash-preview',
+    'gemini-2.5-pro',
+    'gemini-2.5-flash',
+]
+
+
+# =================================
+# 모델별 카테고리 점수 DataFrame 생성 함수
+# =================================
+def create_model_category_dataframe(all_stats: List[Dict]) -> pd.DataFrame:
+    """
+    모든 모델의 통계를 수집하여 모델별(row) 카테고리별(column) 점수 DataFrame 생성
+    
+    Args:
+        all_stats: 모든 모델의 통계 딕셔너리 리스트
+    
+    Returns:
+        모델별 카테고리별 정확도 DataFrame (Model 컬럼 + 각 카테고리별 정확도 컬럼)
+    """
+    # 모든 카테고리 수집
+    all_categories = set()
+    for stats in all_stats:
+        if 'by_category' in stats:
+            for cat_stat in stats['by_category']:
+                all_categories.add(cat_stat['category'])
+    
+    # 카테고리 번역 및 정렬
+    category_list = sorted(all_categories)
+    
+    # 모델별 카테고리별 정확도 딕셔너리 생성
+    model_category_data = []
+    
+    for stats in all_stats:
+        model_name = stats.get('model', 'Unknown')
+        row_data = {'Model': model_name}
+        
+        # 각 카테고리에 대한 정확도 추가
+        category_accuracies = {}
+        if 'by_category' in stats:
+            for cat_stat in stats['by_category']:
+                category_accuracies[cat_stat['category']] = cat_stat['accuracy']
+        
+        # 모든 카테고리에 대해 정확도 설정 (없으면 NaN)
+        for category in category_list:
+            # 영문 컬럼명 사용
+            eng_category = category_translation.get(category, category)
+            row_data[eng_category] = category_accuracies.get(category, None)
+        
+        model_category_data.append(row_data)
+    
+    # DataFrame 생성
+    df = pd.DataFrame(model_category_data)
+    
+    # Model 컬럼을 첫 번째로 이동
+    cols = ['Model'] + [col for col in df.columns if col != 'Model']
+    df = df[cols]
+    
+    # 지정된 모델 순서로 정렬
+    # 모델 순서 딕셔너리 생성 (순서 인덱스)
+    model_order_dict = {}
+    for idx, model in enumerate(MODEL_ORDER):
+        # 원본 모델명과 소문자 버전 모두 저장
+        model_order_dict[model] = idx
+        model_order_dict[model.lower()] = idx
+    
+    # 정렬을 위한 임시 컬럼 추가 (지정된 순서가 없으면 큰 값으로 처리)
+    def get_sort_order(model_name):
+        # 정확히 일치하는 경우
+        if model_name in model_order_dict:
+            return model_order_dict[model_name]
+        
+        # 소문자로 변환해서 매칭 시도
+        model_lower = model_name.lower()
+        if model_lower in model_order_dict:
+            return model_order_dict[model_lower]
+        
+        # 부분 매칭 시도 (실제 모델명이 순서 리스트의 모델명의 시작 부분과 일치하는 경우)
+        # 예: "claude-opus-4-5"는 "claude-opus-4-5-20251101"의 시작 부분과 매칭
+        for idx, ordered_model in enumerate(MODEL_ORDER):
+            ordered_model_lower = ordered_model.lower()
+            # 순서 리스트의 모델명이 실제 모델명으로 시작하거나, 그 반대인 경우
+            if model_lower.startswith(ordered_model_lower) or ordered_model_lower.startswith(model_lower):
+                return idx
+        
+        # 특수 문자 정규화해서 매칭 시도 (언더스코어, 점을 하이픈으로 변환)
+        # 예: gpt-5_2 -> gpt-5-2, gpt-5.2 -> gpt-5-2
+        def normalize_model_name(name):
+            return name.lower().replace('_', '-').replace('.', '-')
+        
+        model_normalized = normalize_model_name(model_name)
+        for idx, ordered_model in enumerate(MODEL_ORDER):
+            ordered_model_normalized = normalize_model_name(ordered_model)
+            if model_normalized.startswith(ordered_model_normalized) or ordered_model_normalized.startswith(model_normalized):
+                return idx
+        
+        # 매칭되지 않으면 큰 값으로 처리 (맨 뒤로)
+        return 999999
+    
+    df['_sort_order'] = df['Model'].map(get_sort_order)
+    
+    # 정렬 (지정된 순서 우선, 그 다음 모델명 알파벳 순)
+    df = df.sort_values(['_sort_order', 'Model'])
+    df = df.drop('_sort_order', axis=1)
+    
+    return df
+
+
+# =================================
 # CSV 파일 처리 함수
 # =================================
 def process_csv(
     input_csv_path: str,
     output_csv_path: str,
     model_name: str
-) -> None:
+) -> Optional[Dict]:
     """
     CSV 파일을 읽어서 정답 비교 및 통계 계산 수행
     
@@ -221,14 +410,14 @@ def process_csv(
         data = pd.read_csv(input_csv_path)
     except Exception as e:
         print(f"CSV 파일 읽기 오류: {e}")
-        return
+        return None
     
     answer_col = f"answer"
     
     # 모델 답변 컬럼이 있는지 확인
     if answer_col not in data.columns:
         print(f"오류: '{answer_col}' 컬럼을 찾을 수 없습니다.")
-        return
+        return None
     
     # 정답 여부 확인 및 컬럼 추가
     is_correct_col = f"is_correct"
@@ -254,6 +443,9 @@ def process_csv(
     os.makedirs(os.path.dirname(output_csv_path) if os.path.dirname(output_csv_path) else ".", exist_ok=True)
     data.to_csv(output_csv_path, index=False, encoding='utf-8-sig')
     print(f"결과 저장 완료: {output_csv_path}")
+    
+    # 통계 딕셔너리 반환 (모델별 카테고리 점수 CSV 생성을 위해)
+    return stats
 
 
 # =================================
@@ -289,8 +481,10 @@ if __name__ == "__main__":
         print("=" * 60)
         
         # ==========================================
-        # 2단계: 각 파일 처리
+        # 2단계: 각 파일 처리 및 통계 수집
         # ==========================================
+        all_stats = []  # 모든 모델의 통계를 수집
+        
         for input_file in input_files:
             print(f"\n{'='*60}")
             print(f"처리 중: {os.path.basename(input_file)}")
@@ -312,13 +506,37 @@ if __name__ == "__main__":
             output_file = input_file  # 같은 파일에 덮어쓰기 (정답 여부 컬럼 추가)
             
             # CSV 처리 및 통계 계산 실행
-            process_csv(input_file, output_file, model_name)
+            stats = process_csv(input_file, output_file, model_name)
+            
+            # 통계 수집 (카테고리별 통계가 있는 경우만)
+            if stats and 'by_category' in stats:
+                all_stats.append(stats)
             
             print(f"✓ {os.path.basename(input_file)} 처리 완료")
         
         print("\n" + "=" * 60)
         print("모든 파일 처리 완료!")
         print("=" * 60)
+        
+        # ==========================================
+        # 3단계: 모델별 카테고리별 점수 CSV 생성
+        # ==========================================
+        if all_stats:
+            print("\n" + "=" * 60)
+            print("모델별 카테고리별 점수 CSV 생성")
+            print("=" * 60)
+            
+            # 모델별 카테고리별 정확도 DataFrame 생성
+            model_category_df = create_model_category_dataframe(all_stats)
+            
+            # CSV 저장
+            output_csv_path = os.path.join(results_dir, "model_category_scores.csv")
+            model_category_df.to_csv(output_csv_path, index=False, encoding='utf-8-sig')
+            print(f"✓ 모델별 카테고리별 점수 CSV 저장 완료: {output_csv_path}")
+            print(f"  - 모델 수: {len(model_category_df)}개")
+            print(f"  - 카테고리 수: {len(model_category_df.columns) - 1}개 (Model 컬럼 제외)")
+        else:
+            print("\n경고: 카테고리별 통계가 없어 모델별 카테고리 점수 CSV를 생성할 수 없습니다.")
             
     except KeyboardInterrupt:
         print("\n\n사용자에 의해 중단되었습니다.")
