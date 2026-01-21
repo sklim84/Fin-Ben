@@ -325,7 +325,7 @@ if __name__ == "__main__":
         
         for model_idx, model in enumerate(TARGET_MODELS, 1):
             # 모델명은 Claude API 모델명 그대로 사용
-            model_name = model.replace("/", "_").replace(":", "_").replace(".", "_")
+            model_name = model.replace("/", "_").replace(":", "_")
             model_name_safe = model_name
             
             print(f"\n{'='*60}")

@@ -275,9 +275,13 @@ MODEL_ORDER = [
     'EXAONE-4.0-32B',
     'EXAONE-4.0-1.2B',
     'gpt-5.2',
+    'gpt-5.2_reasoning',
     'gpt-5',
     'gpt-5-mini',
+    'gpt-5-mini_reasoning',
     'gpt-5-nano',
+    'gpt-5-nano_reasoning',
+    'gpt-4.1',
     'claude-sonnet-4-5-20250929',
     'claude-haiku-4-5-20251001',
     'claude-opus-4-5-20251101',
@@ -285,6 +289,10 @@ MODEL_ORDER = [
     'gemini-3-flash-preview',
     'gemini-2.5-pro',
     'gemini-2.5-flash',
+    'mistral-medium-2508',
+    # 'magistral-medium-2509'
+    "grok-4-1-fast-reasoning",
+    "grok-4-fast-reasoning",
 ]
 
 
@@ -367,9 +375,8 @@ def create_model_category_dataframe(all_stats: List[Dict]) -> pd.DataFrame:
                 return idx
         
         # 특수 문자 정규화해서 매칭 시도 (언더스코어, 점을 하이픈으로 변환)
-        # 예: gpt-5_2 -> gpt-5-2, gpt-5.2 -> gpt-5-2
         def normalize_model_name(name):
-            return name.lower().replace('_', '-').replace('.', '-')
+            return name.lower().replace('_', '-')
         
         model_normalized = normalize_model_name(model_name)
         for idx, ordered_model in enumerate(MODEL_ORDER):

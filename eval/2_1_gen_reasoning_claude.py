@@ -345,7 +345,7 @@ if __name__ == "__main__":
         total_models = len(TARGET_MODELS)
         
         for model_idx, model_name in enumerate(TARGET_MODELS, 1):
-            model_name_safe = model_name.replace("/", "_").replace(":", "_").replace(".", "_")
+            model_name_safe = model_name.replace("/", "_").replace(":", "_")
             
             print(f"\n{'='*60}")
             print(f"[모델 {model_idx}/{total_models}] {model_name}")
