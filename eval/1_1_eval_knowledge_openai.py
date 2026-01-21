@@ -242,7 +242,7 @@ if __name__ == "__main__":
         for benchmark in BENCHMARKS:
             input_path = os.path.join(DATASET_DIR, benchmark)
 
-            model_safe = model_name.replace("/", "_").replace(".", "_")
+            model_safe = model_name.replace("/", "_")
             results_dir = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                 "_results/1_fin_knowledge"
