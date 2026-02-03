@@ -1,5 +1,5 @@
 {
-  "model": "openai_gpt-5.2",
+  "model": "gpt-5.2_reasoning",
   "total_questions": 99,
   "score_stats": {
     "mean": 2.78,
