@@ -1,68 +1,68 @@
 {
   "model": "gpt-5-nano_reasoning",
-  "total_questions": 513,
+  "total_questions": 575,
   "overall_mean_score": 5.64,
   "metrics": {
     "coherence": {
-      "mean": 5.92,
+      "mean": 5.89,
       "median": 6.0,
-      "std": 1.75,
-      "min": 2,
+      "std": 1.73,
+      "min": 1,
       "max": 9,
-      "count": 510,
-      "missing": 3
+      "count": 561,
+      "missing": 14
     },
     "consistency": {
       "mean": 7.2,
       "median": 7.0,
-      "std": 1.27,
-      "min": 2,
-      "max": 9,
-      "count": 510,
-      "missing": 3
+      "std": 1.22,
+      "min": 3,
+      "max": 10,
+      "count": 561,
+      "missing": 14
     },
     "accuracy": {
-      "mean": 5.01,
-      "median": 6.0,
-      "std": 2.22,
+      "mean": 4.92,
+      "median": 5.0,
+      "std": 2.26,
       "min": 1,
       "max": 9,
-      "count": 510,
-      "missing": 3
+      "count": 561,
+      "missing": 14
     },
     "completeness": {
-      "mean": 4.97,
+      "mean": 5.05,
       "median": 5.0,
-      "std": 1.87,
+      "std": 1.76,
       "min": 1,
       "max": 9,
-      "count": 510,
-      "missing": 3
+      "count": 561,
+      "missing": 14
     },
     "reasoning": {
-      "mean": 5.52,
+      "mean": 5.54,
       "median": 6.0,
-      "std": 1.91,
-      "min": 1,
+      "std": 1.87,
+      "min": 2,
       "max": 9,
-      "count": 510,
-      "missing": 3
+      "count": 561,
+      "missing": 14
     },
     "overall_quality": {
-      "mean": 5.22,
-      "median": 5.0,
-      "std": 2.0,
+      "mean": 5.23,
+      "median": 6.0,
+      "std": 1.94,
       "min": 1,
       "max": 9,
-      "count": 510,
-      "missing": 3
+      "count": 561,
+      "missing": 14
     }
   },
   "by_category": [
     {
       "category": "context_relevant_only_shuffled",
       "total": 3,
-      "mean_score": 7.28,
+      "mean_score": 7.22,
       "metrics": {
         "coherence": {
           "mean": 7.67,
@@ -77,7 +77,7 @@
           "count": 3
         },
         "completeness": {
-          "mean": 6.67,
+          "mean": 6.33,
           "count": 3
         },
         "reasoning": {
@@ -91,105 +91,74 @@
       }
     },
     {
-      "category": "context_relevant_only",
-      "total": 63,
-      "mean_score": 6.06,
-      "metrics": {
-        "coherence": {
-          "mean": 6.29,
-          "count": 63
-        },
-        "consistency": {
-          "mean": 7.4,
-          "count": 63
-        },
-        "accuracy": {
-          "mean": 5.59,
-          "count": 63
-        },
-        "completeness": {
-          "mean": 5.48,
-          "count": 63
-        },
-        "reasoning": {
-          "mean": 5.92,
-          "count": 63
-        },
-        "overall_quality": {
-          "mean": 5.67,
-          "count": 63
-        }
-      }
-    },
-    {
       "category": "context_relevant_middle_with_en_noise",
-      "total": 128,
-      "mean_score": 5.82,
+      "total": 138,
+      "mean_score": 5.97,
       "metrics": {
         "coherence": {
-          "mean": 6.15,
-          "count": 127
+          "mean": 6.33,
+          "count": 135
         },
         "consistency": {
-          "mean": 7.43,
-          "count": 127
+          "mean": 7.47,
+          "count": 135
         },
         "accuracy": {
-          "mean": 5.13,
-          "count": 127
+          "mean": 5.3,
+          "count": 135
         },
         "completeness": {
-          "mean": 5.14,
-          "count": 127
+          "mean": 5.36,
+          "count": 135
         },
         "reasoning": {
-          "mean": 5.65,
-          "count": 127
+          "mean": 5.81,
+          "count": 135
         },
         "overall_quality": {
-          "mean": 5.42,
-          "count": 127
-        }
-      }
-    },
-    {
-      "category": "context_relevant_end",
-      "total": 58,
-      "mean_score": 5.76,
-      "metrics": {
-        "coherence": {
-          "mean": 5.98,
-          "count": 57
-        },
-        "consistency": {
-          "mean": 7.39,
-          "count": 57
-        },
-        "accuracy": {
-          "mean": 5.04,
-          "count": 57
-        },
-        "completeness": {
-          "mean": 5.07,
-          "count": 57
-        },
-        "reasoning": {
-          "mean": 5.75,
-          "count": 57
-        },
-        "overall_quality": {
-          "mean": 5.32,
-          "count": 57
+          "mean": 5.55,
+          "count": 135
         }
       }
     },
     {
       "category": "context_relevant_front",
-      "total": 64,
-      "mean_score": 5.47,
+      "total": 70,
+      "mean_score": 5.61,
       "metrics": {
         "coherence": {
-          "mean": 5.62,
+          "mean": 5.87,
+          "count": 69
+        },
+        "consistency": {
+          "mean": 7.17,
+          "count": 69
+        },
+        "accuracy": {
+          "mean": 4.86,
+          "count": 69
+        },
+        "completeness": {
+          "mean": 5.04,
+          "count": 69
+        },
+        "reasoning": {
+          "mean": 5.49,
+          "count": 69
+        },
+        "overall_quality": {
+          "mean": 5.25,
+          "count": 69
+        }
+      }
+    },
+    {
+      "category": "context_relevant_only",
+      "total": 68,
+      "mean_score": 5.55,
+      "metrics": {
+        "coherence": {
+          "mean": 5.78,
           "count": 64
         },
         "consistency": {
@@ -197,270 +166,301 @@
           "count": 64
         },
         "accuracy": {
-          "mean": 4.81,
-          "count": 64
-        },
-        "completeness": {
           "mean": 4.84,
           "count": 64
         },
+        "completeness": {
+          "mean": 5.16,
+          "count": 64
+        },
         "reasoning": {
-          "mean": 5.42,
+          "mean": 5.33,
           "count": 64
         },
         "overall_quality": {
-          "mean": 5.06,
+          "mean": 5.12,
           "count": 64
         }
       }
     },
     {
       "category": "context_relevant_scattered",
-      "total": 64,
-      "mean_score": 5.46,
+      "total": 70,
+      "mean_score": 5.54,
       "metrics": {
         "coherence": {
-          "mean": 5.86,
-          "count": 64
-        },
-        "consistency": {
-          "mean": 7.02,
-          "count": 64
-        },
-        "accuracy": {
-          "mean": 4.88,
-          "count": 64
-        },
-        "completeness": {
-          "mean": 4.8,
-          "count": 64
-        },
-        "reasoning": {
-          "mean": 5.25,
-          "count": 64
-        },
-        "overall_quality": {
-          "mean": 4.97,
-          "count": 64
-        }
-      }
-    },
-    {
-      "category": "context_relevant_dispersed",
-      "total": 68,
-      "mean_score": 5.44,
-      "metrics": {
-        "coherence": {
-          "mean": 5.84,
+          "mean": 5.69,
           "count": 68
         },
         "consistency": {
-          "mean": 6.99,
+          "mean": 7.07,
           "count": 68
         },
         "accuracy": {
-          "mean": 4.74,
+          "mean": 4.87,
           "count": 68
         },
         "completeness": {
-          "mean": 4.81,
+          "mean": 4.87,
           "count": 68
         },
         "reasoning": {
-          "mean": 5.31,
+          "mean": 5.54,
           "count": 68
         },
         "overall_quality": {
-          "mean": 4.96,
+          "mean": 5.21,
           "count": 68
         }
       }
     },
     {
       "category": "context_relevant_middle",
-      "total": 65,
-      "mean_score": 5.24,
+      "total": 76,
+      "mean_score": 5.51,
       "metrics": {
         "coherence": {
-          "mean": 5.44,
-          "count": 64
+          "mean": 5.71,
+          "count": 75
         },
         "consistency": {
-          "mean": 6.86,
-          "count": 64
+          "mean": 7.11,
+          "count": 75
         },
         "accuracy": {
-          "mean": 4.69,
-          "count": 64
+          "mean": 4.81,
+          "count": 75
         },
         "completeness": {
-          "mean": 4.45,
-          "count": 64
+          "mean": 4.89,
+          "count": 75
         },
         "reasoning": {
-          "mean": 5.14,
-          "count": 64
+          "mean": 5.41,
+          "count": 75
         },
         "overall_quality": {
-          "mean": 4.88,
-          "count": 64
+          "mean": 5.13,
+          "count": 75
+        }
+      }
+    },
+    {
+      "category": "context_relevant_end",
+      "total": 72,
+      "mean_score": 5.51,
+      "metrics": {
+        "coherence": {
+          "mean": 5.69,
+          "count": 71
+        },
+        "consistency": {
+          "mean": 7.15,
+          "count": 71
+        },
+        "accuracy": {
+          "mean": 4.79,
+          "count": 71
+        },
+        "completeness": {
+          "mean": 4.93,
+          "count": 71
+        },
+        "reasoning": {
+          "mean": 5.41,
+          "count": 71
+        },
+        "overall_quality": {
+          "mean": 5.1,
+          "count": 71
+        }
+      }
+    },
+    {
+      "category": "context_relevant_dispersed",
+      "total": 78,
+      "mean_score": 5.42,
+      "metrics": {
+        "coherence": {
+          "mean": 5.7,
+          "count": 76
+        },
+        "consistency": {
+          "mean": 7.05,
+          "count": 76
+        },
+        "accuracy": {
+          "mean": 4.58,
+          "count": 76
+        },
+        "completeness": {
+          "mean": 4.83,
+          "count": 76
+        },
+        "reasoning": {
+          "mean": 5.42,
+          "count": 76
+        },
+        "overall_quality": {
+          "mean": 4.92,
+          "count": 76
         }
       }
     }
   ],
   "by_source": [
     {
-      "source": "MOLEG_AX",
-      "total": 63,
+      "source": "MOLEG_CoE1",
+      "total": 68,
       "mean_score": 6.06,
       "metrics": {
         "coherence": {
-          "mean": 6.29,
-          "count": 63
+          "mean": 6.38,
+          "count": 66
         },
         "consistency": {
-          "mean": 7.4,
-          "count": 63
+          "mean": 7.64,
+          "count": 66
         },
         "accuracy": {
-          "mean": 5.59,
-          "count": 63
+          "mean": 5.42,
+          "count": 66
         },
         "completeness": {
-          "mean": 5.48,
-          "count": 63
+          "mean": 5.41,
+          "count": 66
         },
         "reasoning": {
-          "mean": 5.92,
-          "count": 63
+          "mean": 5.88,
+          "count": 66
         },
         "overall_quality": {
-          "mean": 5.67,
-          "count": 63
+          "mean": 5.64,
+          "count": 66
         }
       }
     },
     {
       "source": "FSC_CoE1",
-      "total": 64,
-      "mean_score": 5.82,
+      "total": 70,
+      "mean_score": 5.88,
       "metrics": {
         "coherence": {
-          "mean": 6.16,
-          "count": 64
+          "mean": 6.28,
+          "count": 69
         },
         "consistency": {
-          "mean": 7.39,
-          "count": 64
+          "mean": 7.32,
+          "count": 69
         },
         "accuracy": {
-          "mean": 5.09,
-          "count": 64
+          "mean": 5.17,
+          "count": 69
         },
         "completeness": {
-          "mean": 5.09,
-          "count": 64
+          "mean": 5.3,
+          "count": 69
         },
         "reasoning": {
-          "mean": 5.73,
-          "count": 64
+          "mean": 5.75,
+          "count": 69
         },
         "overall_quality": {
-          "mean": 5.47,
-          "count": 64
+          "mean": 5.46,
+          "count": 69
         }
       }
     },
     {
-      "source": "MOLEG_CoE1",
-      "total": 64,
-      "mean_score": 5.81,
+      "source": "MOLEG_AX",
+      "total": 68,
+      "mean_score": 5.55,
       "metrics": {
         "coherence": {
-          "mean": 6.14,
-          "count": 63
+          "mean": 5.78,
+          "count": 64
         },
         "consistency": {
-          "mean": 7.46,
-          "count": 63
+          "mean": 7.08,
+          "count": 64
         },
         "accuracy": {
-          "mean": 5.16,
-          "count": 63
+          "mean": 4.84,
+          "count": 64
         },
         "completeness": {
-          "mean": 5.19,
-          "count": 63
+          "mean": 5.16,
+          "count": 64
         },
         "reasoning": {
-          "mean": 5.56,
-          "count": 63
+          "mean": 5.33,
+          "count": 64
         },
         "overall_quality": {
-          "mean": 5.37,
-          "count": 63
+          "mean": 5.12,
+          "count": 64
         }
       }
     },
     {
       "source": "FSC_AX",
-      "total": 305,
-      "mean_score": 5.5,
+      "total": 350,
+      "mean_score": 5.53,
       "metrics": {
         "coherence": {
-          "mean": 5.78,
-          "count": 304
+          "mean": 5.75,
+          "count": 344
         },
         "consistency": {
-          "mean": 7.1,
-          "count": 304
+          "mean": 7.13,
+          "count": 344
         },
         "accuracy": {
-          "mean": 4.87,
-          "count": 304
+          "mean": 4.79,
+          "count": 344
         },
         "completeness": {
-          "mean": 4.82,
-          "count": 304
+          "mean": 4.93,
+          "count": 344
         },
         "reasoning": {
-          "mean": 5.4,
-          "count": 304
+          "mean": 5.46,
+          "count": 344
         },
         "overall_quality": {
-          "mean": 5.07,
-          "count": 304
+          "mean": 5.13,
+          "count": 344
         }
       }
     },
     {
       "source": "FSC_CoE2",
-      "total": 17,
-      "mean_score": 5.1,
+      "total": 19,
+      "mean_score": 5.49,
       "metrics": {
         "coherence": {
-          "mean": 5.44,
-          "count": 16
+          "mean": 5.61,
+          "count": 18
         },
         "consistency": {
-          "mean": 6.5,
-          "count": 16
+          "mean": 6.89,
+          "count": 18
         },
         "accuracy": {
-          "mean": 4.31,
-          "count": 16
+          "mean": 4.94,
+          "count": 18
         },
         "completeness": {
-          "mean": 4.62,
-          "count": 16
+          "mean": 4.78,
+          "count": 18
         },
         "reasoning": {
-          "mean": 5.06,
-          "count": 16
+          "mean": 5.61,
+          "count": 18
         },
         "overall_quality": {
-          "mean": 4.69,
-          "count": 16
+          "mean": 5.11,
+          "count": 18
         }
       }
     }
@@ -468,110 +468,110 @@
   "score_distribution": {
     "coherence": {
       "1-3": {
-        "count": 59,
-        "percentage": 11.57
+        "count": 65,
+        "percentage": 11.59
       },
       "4-6": {
-        "count": 215,
-        "percentage": 42.16
+        "count": 244,
+        "percentage": 43.49
       },
       "7-8": {
-        "count": 229,
-        "percentage": 44.9
+        "count": 243,
+        "percentage": 43.32
       },
       "9-10": {
-        "count": 7,
-        "percentage": 1.37
+        "count": 9,
+        "percentage": 1.6
       }
     },
     "consistency": {
       "1-3": {
-        "count": 4,
-        "percentage": 0.78
+        "count": 3,
+        "percentage": 0.53
       },
       "4-6": {
-        "count": 134,
-        "percentage": 26.27
+        "count": 146,
+        "percentage": 26.02
       },
       "7-8": {
-        "count": 307,
-        "percentage": 60.2
+        "count": 339,
+        "percentage": 60.43
       },
       "9-10": {
-        "count": 65,
-        "percentage": 12.75
+        "count": 73,
+        "percentage": 13.01
       }
     },
     "accuracy": {
       "1-3": {
-        "count": 168,
-        "percentage": 32.94
+        "count": 197,
+        "percentage": 35.12
       },
       "4-6": {
-        "count": 176,
-        "percentage": 34.51
+        "count": 186,
+        "percentage": 33.16
       },
       "7-8": {
-        "count": 153,
-        "percentage": 30.0
+        "count": 162,
+        "percentage": 28.88
       },
       "9-10": {
-        "count": 13,
-        "percentage": 2.55
+        "count": 16,
+        "percentage": 2.85
       }
     },
     "completeness": {
       "1-3": {
-        "count": 136,
-        "percentage": 26.67
+        "count": 131,
+        "percentage": 23.35
       },
       "4-6": {
-        "count": 248,
-        "percentage": 48.63
+        "count": 307,
+        "percentage": 54.72
       },
       "7-8": {
-        "count": 117,
-        "percentage": 22.94
+        "count": 114,
+        "percentage": 20.32
       },
       "9-10": {
         "count": 9,
-        "percentage": 1.76
+        "percentage": 1.6
       }
     },
     "reasoning": {
       "1-3": {
-        "count": 113,
-        "percentage": 22.16
+        "count": 121,
+        "percentage": 21.57
       },
       "4-6": {
-        "count": 203,
-        "percentage": 39.8
+        "count": 223,
+        "percentage": 39.75
       },
       "7-8": {
-        "count": 183,
-        "percentage": 35.88
+        "count": 203,
+        "percentage": 36.19
       },
       "9-10": {
-        "count": 11,
-        "percentage": 2.16
+        "count": 14,
+        "percentage": 2.5
       }
     },
     "overall_quality": {
       "1-3": {
-        "count": 151,
-        "percentage": 29.61
+        "count": 146,
+        "percentage": 26.02
       },
       "4-6": {
-        "count": 181,
-        "percentage": 35.49
+        "count": 230,
+        "percentage": 41.0
       },
       "7-8": {
-        "count": 170,
-        "percentage": 33.33
+        "count": 176,
+        "percentage": 31.37
       },
       "9-10": {
-        "count": 8,
-        "percentage": 1.57
+        "count": 9,
+        "percentage": 1.6
       }
     }
   }

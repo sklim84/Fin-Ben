@@ -1,5 +1,5 @@
 {
-  "model": "grok-4-fast",
+  "model": "grok-4-fast-reasoning",
   "total_questions": 575,
   "overall_mean_score": 6.58,
   "metrics": {
