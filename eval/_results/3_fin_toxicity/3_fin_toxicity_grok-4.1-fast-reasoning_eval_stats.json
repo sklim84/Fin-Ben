@@ -1,5 +1,5 @@
 {
-  "model": "x-ai_grok-4.1-fast",
+  "model": "grok-4.1-fast-reasoning",
   "total_questions": 100,
   "score_stats": {
     "mean": 3.68,

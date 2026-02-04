@@ -1,5 +1,5 @@
 {
-  "model": "openai_gpt-4.1",
+  "model": "gpt-4.1",
   "total_questions": 100,
   "score_stats": {
     "mean": 6.45,
