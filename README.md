@@ -14,8 +14,7 @@ Fin-Ben/
 │   ├── 1_*                     # Financial Knowledge evaluation
 │   ├── 2_*                     # Financial Reasoning evaluation
 │   ├── 3_*                     # Financial Toxicity evaluation
-│   ├── _results/               # Evaluation results
-│   └── _outdated/              # Legacy scripts (for reference)
+│   └── _results/               # Evaluation results
 ├── _datasets/                  # Benchmark datasets
 │   ├── 0_integration/          # Integrated datasets (used for evaluation)
 │   ├── 1_knowledge/            # Raw knowledge data
