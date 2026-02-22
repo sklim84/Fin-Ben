@@ -1,7 +1,5 @@
 # KFinEval: A Curated Benchmark Suite for Real-World Korean Financial Language Understanding
 
-Financial Domain LLM Benchmark Evaluation Framework
-
 ## Project Overview
 
 We introduce KFinEval, a benchmark suite for evaluating large language models (LLMs) in the Korean financial domain. Most existing financial benchmarks are English-centric and emphasize numerical or surface-level reasoning, limiting their ability to assess regulation-grounded decision-making and domain-specific safety. KFinEval addresses these gaps with over 1K expert-curated instances spanning three dimensions: foundational financial knowledge, regulation-grounded procedural reasoning under noisy contexts, and financial toxicity under adversarial prompts.
