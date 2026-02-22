@@ -1,15 +1,15 @@
-# Fin-Ben
+# KFinEval
 
 Financial Domain LLM Benchmark Evaluation Framework
 
 ## Project Overview
 
-Fin-Ben is a comprehensive benchmark framework for evaluating LLM model performance in the financial domain. It evaluates model capabilities across three key areas: Financial Knowledge, Reasoning Ability, and Toxicity Defense.
+KFinEval is a comprehensive benchmark framework for evaluating LLM model performance in the financial domain. It evaluates model capabilities across three key areas: Financial Knowledge, Reasoning Ability, and Toxicity Defense.
 
 ## Directory Structure
 
 ```
-Fin-Ben/
+KFinEval/
 ├── eval/                       # Evaluation scripts
 │   ├── 1_*                     # Financial Knowledge evaluation
 │   ├── 2_*                     # Financial Reasoning evaluation
