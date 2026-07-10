@@ -1,0 +1,14 @@
+
+[reasoning] mistralai/ministral-3b-2512  (50 items, 0 done)
+
+[reasoning] google/gemma-3-4b-it  (50 items, 2 done)
+[reasoning] meta-llama/llama-3.1-70b-instruct  (50 items, 13 done)
+
+
+[toxicity] meta-llama/llama-3.1-70b-instruct  (50 items, 0 done)
+
+[toxicity] google/gemma-3-4b-it  (50 items, 2 done)
+
+[toxicity] mistralai/ministral-3b-2512  (50 items, 0 done)
+[done] mistralai/ministral-3b-2512
+[done] google/gemma-3-4b-it

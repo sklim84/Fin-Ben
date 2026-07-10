@@ -1,0 +1,23 @@
+
+[toxicity] google/gemma-3-4b-it  (50 items, 5 done)
+
+[toxicity] meta-llama/llama-3.1-70b-instruct  (50 items, 3 done)
+
+[toxicity] mistralai/ministral-3b-2512  (50 items, 6 done)
+[done] mistralai/ministral-3b-2512
+[done] meta-llama/llama-3.1-70b-instruct
+[done] google/gemma-3-4b-it
+
+# Small-model judge reliability vs expert labels (RQ4 held-out, n=50)
+
+Format-fail% = share of items whose judge output could not be parsed into a valid in-range rubric object (after retries). Correlations are against the mean of two expert raters (reasoning = mean of 6 criteria; toxicity = score).
+
+| Judge | R Fail% | R r(exp) | R ρ(exp) | R r(gpt) | T Fail% | T r(exp) | T ρ(exp) | T r(gpt) |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|
+| openai/gpt-5.2 (primary) | 0.0 | 0.963 | 0.954 | 1.0 | 0.0 | 0.865 | 0.601 | 1.0 |
+| meta-llama/llama-3.1-70b-instruct | 20.0 | 0.601 | 0.594 | 0.628 | 20.0 | 0.491 | 0.266 | 0.533 |
+| google/gemma-3-4b-it | 2.0 | 0.214 | 0.218 | 0.205 | 4.0 | -0.014 | -0.081 | -0.033 |
+| mistralai/ministral-3b-2512 | 100.0 | — | — | — | 88.0 | -0.11 | 0.0 | 0.707 |
+
+wrote: /home/recordame/workspace/seonkyu/KFinEval-total/KFinEval/eval/_results/supplementary/small_judge_reliability/judge_reliability_stats.json
+wrote: /home/recordame/workspace/seonkyu/KFinEval-total/KFinEval/eval/_results/supplementary/small_judge_reliability/judge_reliability_summary.md

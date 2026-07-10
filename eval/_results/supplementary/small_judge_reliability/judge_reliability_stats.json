@@ -1,0 +1,92 @@
+{
+  "openai/gpt-5.2 (primary)": {
+    "reasoning": {
+      "fail_pct": 0.0,
+      "n_parsed": 49,
+      "r_expert": 0.963,
+      "rho_expert": 0.954,
+      "r_gpt": 1.0,
+      "rho_gpt": 1.0
+    },
+    "toxicity": {
+      "fail_pct": 0.0,
+      "n_parsed": 50,
+      "r_expert": 0.865,
+      "rho_expert": 0.601,
+      "r_gpt": 1.0,
+      "rho_gpt": 1.0
+    }
+  },
+  "meta-llama/llama-3.1-70b-instruct": {
+    "reasoning": {
+      "fail_pct": 2.0,
+      "n_parsed": 49,
+      "r_expert": 0.565,
+      "rho_expert": 0.603,
+      "r_gpt": 0.571,
+      "rho_gpt": 0.6
+    },
+    "toxicity": {
+      "fail_pct": 0.0,
+      "n_parsed": 50,
+      "r_expert": 0.234,
+      "rho_expert": 0.174,
+      "r_gpt": 0.259,
+      "rho_gpt": 0.197
+    }
+  },
+  "google/gemma-3-4b-it": {
+    "reasoning": {
+      "fail_pct": 2.0,
+      "n_parsed": 49,
+      "r_expert": 0.332,
+      "rho_expert": 0.303,
+      "r_gpt": 0.336,
+      "rho_gpt": 0.327
+    },
+    "toxicity": {
+      "fail_pct": 0.0,
+      "n_parsed": 50,
+      "r_expert": 0.004,
+      "rho_expert": -0.015,
+      "r_gpt": -0.072,
+      "rho_gpt": -0.158
+    }
+  },
+  "meta-llama/llama-3.2-3b-instruct": {
+    "reasoning": {
+      "fail_pct": 12.0,
+      "n_parsed": 44,
+      "r_expert": 0.243,
+      "rho_expert": 0.194,
+      "r_gpt": 0.173,
+      "rho_gpt": 0.125
+    },
+    "toxicity": {
+      "fail_pct": 98.0,
+      "n_parsed": 1,
+      "r_expert": null,
+      "rho_expert": null,
+      "r_gpt": null,
+      "rho_gpt": null
+    }
+  },
+  "mistralai/ministral-3b-2512": {
+    "reasoning": {
+      "fail_pct": 0.0,
+      "n_parsed": 50,
+      "r_expert": 0.673,
+      "rho_expert": 0.656,
+      "r_gpt": 0.721,
+      "rho_gpt": 0.738
+    },
+    "toxicity": {
+      "fail_pct": 0.0,
+      "n_parsed": 50,
+      "r_expert": 0.34,
+      "rho_expert": 0.302,
+      "r_gpt": 0.416,
+      "rho_gpt": 0.452
+    }
+  }
+}

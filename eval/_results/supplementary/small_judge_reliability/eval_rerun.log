@@ -1,0 +1,30 @@
+
+[reasoning] google/gemma-3-4b-it  (50 items, 0 done)
+[reasoning] meta-llama/llama-3.1-70b-instruct  (50 items, 0 done)
+
+
+[reasoning] meta-llama/llama-3.2-3b-instruct  (50 items, 0 done)
+
+[reasoning] mistralai/ministral-3b-2512  (50 items, 2 done)
+
+[toxicity] meta-llama/llama-3.2-3b-instruct  (50 items, 0 done)
+[done] meta-llama/llama-3.2-3b-instruct
+
+[toxicity] meta-llama/llama-3.1-70b-instruct  (50 items, 0 done)
+
+[toxicity] mistralai/ministral-3b-2512  (50 items, 0 done)
+
+[toxicity] google/gemma-3-4b-it  (50 items, 0 done)
+[done] meta-llama/llama-3.1-70b-instruct
+[done] mistralai/ministral-3b-2512
+[done] google/gemma-3-4b-it
+
+                            judge  reasoning_fail_pct  reasoning_r_expert  reasoning_rho_expert  reasoning_r_gpt  toxicity_fail_pct  toxicity_r_expert  toxicity_rho_expert  toxicity_r_gpt
+         openai/gpt-5.2 (primary)                 0.0               0.963                 0.954            1.000                0.0              0.865                0.601           1.000
+meta-llama/llama-3.1-70b-instruct                 2.0               0.565                 0.603            0.571                0.0              0.234                0.174           0.259
+             google/gemma-3-4b-it                 2.0               0.332                 0.303            0.336                0.0              0.004               -0.015          -0.072
+ meta-llama/llama-3.2-3b-instruct                12.0               0.243                 0.194            0.173               98.0                NaN                  NaN             NaN
+      mistralai/ministral-3b-2512                 0.0               0.673                 0.656            0.721                0.0              0.340                0.302           0.416
+
+wrote: /home/recordame/workspace/seonkyu/KFinEval-total/KFinEval/eval/_results/supplementary/small_judge_reliability/judge_reliability_stats.json
+wrote: /home/recordame/workspace/seonkyu/KFinEval-total/KFinEval/eval/_results/supplementary/small_judge_reliability/judge_reliability_summary.csv
