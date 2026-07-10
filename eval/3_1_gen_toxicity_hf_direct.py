@@ -78,7 +78,7 @@ def load_model_hf(hf_model: str):
     model = AutoModelForCausalLM.from_pretrained(
         hf_model,
         torch_dtype=torch.bfloat16,
-        device_map="auto",
+        device_map=({"": 0} if torch.cuda.device_count() == 1 else "auto"),
         trust_remote_code=True,
         low_cpu_mem_usage=True,
     )

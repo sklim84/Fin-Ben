@@ -36,7 +36,7 @@ os.environ["HUGGINGFACE_HUB_TOKEN"] = _hf_token
 print("✓ HuggingFace 토큰 확인됨")
 
 # HuggingFace 캐시를 workspace로 설정 (모듈 로드 전에 설정해야 함)
-workspace_cache_dir = "/workspace/.cache/huggingface"
+workspace_cache_dir = os.environ.get("HF_HOME") or "/workspace/.cache/huggingface"
 os.makedirs(workspace_cache_dir, exist_ok=True)
 os.environ["HF_HOME"] = workspace_cache_dir
 os.environ["HUGGINGFACE_HUB_CACHE"] = os.path.join(workspace_cache_dir, "hub")
@@ -44,7 +44,7 @@ os.environ["TRANSFORMERS_CACHE"] = os.path.join(workspace_cache_dir, "transforme
 os.environ["HF_DATASETS_CACHE"] = os.path.join(workspace_cache_dir, "datasets")
 
 # vLLM 캐시도 workspace로 설정
-workspace_vllm_cache = "/workspace/.cache/vllm"
+workspace_vllm_cache = os.environ.get("VLLM_CACHE_ROOT") or os.path.expanduser("~/.cache/vllm")
 os.makedirs(workspace_vllm_cache, exist_ok=True)
 
 # 심볼릭 링크 생성 (기존 캐시는 삭제 예정이므로 이동하지 않음)
@@ -146,7 +146,9 @@ def load_model(
             "trust_remote_code": True,
             "dtype": "bfloat16",
         }
-        
+        if os.environ.get("KFINEVAL_QUANT"):   # 예: fp8 (공유 GPU 메모리 제약 시)
+            llm_params["quantization"] = os.environ["KFINEVAL_QUANT"]
+
         if max_model_len is not None:
             llm_params["max_model_len"] = max_model_len
         
@@ -286,7 +288,7 @@ def _update_manifest_row(model_name: str, **updates) -> None:
                 if col not in df.columns:
                     print(f"  [warn] manifest column {col!r} not in schema; skipping")
                     continue
-                df.loc[mask, col] = val
+                df.loc[mask, col] = str(val)  # 매니페스트는 CSV(문자열) — pandas 3.0 dtype 오류 방지
             df.to_csv(tmp_path, index=False)
             os.replace(tmp_path, MANIFEST_PATH)
         finally:

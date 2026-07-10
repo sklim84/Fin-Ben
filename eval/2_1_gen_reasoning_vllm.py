@@ -24,7 +24,7 @@ else:
     print("✓ HuggingFace 토큰 확인됨 (환경 변수에서 로드)")
 
 # HuggingFace 캐시를 workspace로 설정 (모듈 로드 전에 설정해야 함)
-workspace_cache_dir = "/workspace/.cache/huggingface"
+workspace_cache_dir = os.environ.get("HF_HOME") or "/workspace/.cache/huggingface"
 os.makedirs(workspace_cache_dir, exist_ok=True)
 os.environ["HF_HOME"] = workspace_cache_dir
 os.environ["HUGGINGFACE_HUB_CACHE"] = os.path.join(workspace_cache_dir, "hub")
@@ -32,7 +32,7 @@ os.environ["TRANSFORMERS_CACHE"] = os.path.join(workspace_cache_dir, "transforme
 os.environ["HF_DATASETS_CACHE"] = os.path.join(workspace_cache_dir, "datasets")
 
 # vLLM 캐시도 workspace로 설정
-workspace_vllm_cache = "/workspace/.cache/vllm"
+workspace_vllm_cache = os.environ.get("VLLM_CACHE_ROOT") or os.path.expanduser("~/.cache/vllm")
 os.makedirs(workspace_vllm_cache, exist_ok=True)
 
 # 심볼릭 링크 생성 (기존 캐시는 삭제 예정이므로 이동하지 않음)
@@ -132,7 +132,9 @@ def load_model(
             "trust_remote_code": True,
             "dtype": "bfloat16",
         }
-        
+        if os.environ.get("KFINEVAL_QUANT"):   # 예: fp8 (공유 GPU 메모리 제약 시)
+            llm_params["quantization"] = os.environ["KFINEVAL_QUANT"]
+
         if max_model_len is not None:
             llm_params["max_model_len"] = max_model_len
         
@@ -212,91 +214,93 @@ def generate_reasoning(model: LLM, context: str, question: str, sampling_params:
 # =================================
 # CSV 파일 처리 함수
 # =================================
+OUTPUT_COLUMNS_R = ['id', 'source', 'category', 'question', 'context', 'gold', 'answer']
+
+
+def _r_load_done_ids(output_csv_path: str) -> set:
+    """이미 저장된 output CSV에서 완료된 id 집합을 읽어 재개(resume)에 사용."""
+    if not os.path.exists(output_csv_path):
+        return set()
+    try:
+        d = pd.read_csv(output_csv_path, usecols=['id'])
+        return set(d['id'].astype(str).tolist())
+    except Exception:
+        return set()
+
+
 def process_csv(model: LLM, model_name: str, input_csv_path: str, output_csv_path: str):
     """
-    CSV 파일을 읽어서 모델로 추론 생성 수행
-    
-    Args:
-        model: LLM 객체
-        model_name: 모델 이름 (출력 파일명에 사용)
-        input_csv_path: 입력 CSV 파일 경로
-        output_csv_path: 출력 CSV 파일 경로
+    CSV 파일을 읽어 모델로 추론 생성 수행.
+
+    크래시(OOM·세션 종료 등) 대비: 프롬프트를 청크 단위로 나눠 각 청크가 끝날 때마다
+    output CSV 에 append 하고, 재실행 시 이미 저장된 id 는 건너뛴다(resume).
     """
-    # 입력 CSV 파일 읽기
+    # 청크 크기: 환경변수로 조정 가능(메모리 제약 시 작게)
+    chunk_size = int(os.environ.get("KFINEVAL_CHUNK", "64"))
+
     try:
         data = pd.read_csv(input_csv_path)
     except Exception as e:
         print(f"CSV 파일 읽기 오류: {e}")
         return
-    
-    print(f"CSV 파일 로드 완료: {data.shape[0]}개 행, {data.shape[1]}개 컬럼")
-    print(f"컬럼: {list(data.columns)}")
 
-    # 샘플링 파라미터 설정
+    print(f"CSV 파일 로드 완료: {data.shape[0]}개 행, {data.shape[1]}개 컬럼")
+
     sampling_params = SamplingParams(
-        temperature=0.7,  # 추론 생성이므로 약간의 다양성 허용
-        max_tokens=2048,  # 추론 과정이 길 수 있으므로 충분한 토큰 수 설정
-        stop=["\n\n\n"],  # 연속된 줄바꿈에서 중단
+        temperature=0.7,
+        max_tokens=2048,
+        stop=["\n\n\n"],
     )
 
-    # 결과 저장용 리스트
-    results = []
-    error_ids = []
-    total_count = len(data)
-    
-    print(f"\n평가 모델: {model_name}")
-    print(f"총 {total_count}개 질문 처리 시작...\n")
-    
-    for index, row in tqdm(data.iterrows(), total=len(data)):
+    done = _r_load_done_ids(output_csv_path)
+    if done:
+        print(f"  [resume] 이미 저장된 {len(done)}개 문항은 건너뜁니다.")
+
+    # 미완료 프롬프트만 수집
+    prompts, metas, error_ids = [], [], []
+    for index, row in data.iterrows():
         try:
-            _id = row['id']
-            source = row['source']
-            category = row['category']
-            question = row['question']
-            context = row['context']
-            gold = row['gold']
-            
-            # 추론 생성 (context와 question 사용)
-            answer = generate_reasoning(model, context, question, sampling_params)
-            
-            # 결과 저장 (원본 데이터 + 생성된 답변)
-            result_row = {
-                'id': _id,
-                'source': source,
-                'category': category,
-                'question': question,
-                'context': context,
-                'gold': gold,
-                'answer': answer,
-            }
-            
-            results.append(result_row)
-            
-            # 진행 상황 출력 (간헐적으로)
-            if (index + 1) % 10 == 0 or (index + 1) == total_count:
-                print(f"  [{index + 1}/{total_count}] ID: {_id} - 처리 완료")
-            
+            if str(row['id']) in done:
+                continue
+            prompts.append(create_reasoning_prompt(row['context'], row['question']))
+            metas.append({
+                'id': row['id'],
+                'source': row['source'],
+                'category': row['category'],
+                'question': row['question'],
+                'context': row['context'],
+                'gold': row['gold'],
+            })
         except KeyError as e:
             print(f"Error: CSV 파일에 필요한 컬럼이 없습니다: {e}")
             error_ids.append(index)
-            continue
-        except Exception as e:
-            print(f"Error processing row {index}: {e}")
-            error_ids.append(index)
-            continue
 
-    print(f"\n처리 완료: 총 {total_count}개 중 {len(results)}개 성공, {len(error_ids)}개 실패")
-    if error_ids:
-        print(f"실패한 행 인덱스: {error_ids}")
+    total_pending = len(prompts)
+    print(f"\n평가 모델: {model_name}")
+    print(f"처리 대상(미완료): {total_pending}개, 청크 크기: {chunk_size}\n")
 
-    # 결과를 DataFrame으로 변환 후 CSV 파일로 저장
-    if results:
-        results_df = pd.DataFrame(results)
-        # CSV 파일 저장 (UTF-8 BOM 추가하여 Excel에서 한글 깨짐 방지)
-        results_df.to_csv(output_csv_path, index=False, encoding='utf-8-sig')
-        print(f"\n결과 저장 완료: {output_csv_path}")
-    else:
-        print("저장할 결과가 없습니다.")
+    header_needed = not os.path.exists(output_csv_path)
+    n_saved = 0
+    for start in range(0, total_pending, chunk_size):
+        chunk_prompts = prompts[start:start + chunk_size]
+        chunk_metas = metas[start:start + chunk_size]
+        print(f"  [청크 {start//chunk_size + 1}] {len(chunk_prompts)}개 생성 중...")
+        outputs = model.generate(chunk_prompts, sampling_params)
+        rows = []
+        for meta, out in zip(chunk_metas, outputs):
+            r = dict(meta)
+            r['answer'] = out.outputs[0].text.strip()
+            rows.append(r)
+        # 청크 단위 즉시 저장 (append) — 크래시 시 손실 최소화
+        pd.DataFrame(rows, columns=OUTPUT_COLUMNS_R).to_csv(
+            output_csv_path, mode='a', header=header_needed,
+            index=False, encoding='utf-8-sig')
+        header_needed = False
+        n_saved += len(rows)
+        print(f"    [저장] 누적 {n_saved}/{total_pending} → {output_csv_path}")
+
+    print(f"\n처리 완료: 신규 {n_saved}개 저장"
+          f"{f', 컬럼오류 {len(error_ids)}개' if error_ids else ''}")
 
 
 # =================================
@@ -331,20 +335,26 @@ if __name__ == "__main__":
             # "microsoft/Phi-4-mini-reasoning",
             # "openai/gpt-oss-120b",
             # "openai/gpt-oss-20b",
-            "LGAI-EXAONE/EXAONE-4.0-32B",
-            "LGAI-EXAONE/EXAONE-4.0-1.2B",
+            # "LGAI-EXAONE/EXAONE-4.0-32B",
+            # "LGAI-EXAONE/EXAONE-4.0-1.2B",
         ]
-        
+        import os as _os
+        if _os.environ.get("KFINEVAL_MODELS"):
+            TARGET_MODELS = [m.strip() for m in _os.environ["KFINEVAL_MODELS"].split(",") if m.strip()]
+
         # GPU 메모리 사용률 설정 (필요시 모델별로 다르게 설정 가능)
-        GPU_MEMORY_UTILIZATION = 0.9  # 메모리 부족 시 이 값을 높임 (0.7~0.9 권장)
+        GPU_MEMORY_UTILIZATION = float(os.environ.get("KFINEVAL_GPU_UTIL", "0.9"))
         
         # 최대 시퀀스 길이 설정 (추론 생성이므로 충분히 길게 설정)
-        MAX_MODEL_LEN = 32768  # 필요시 조정
+        MAX_MODEL_LEN = int(os.environ.get("KFINEVAL_MAXLEN", "16384"))  # WON=16384 상한; 제약 시 8192 등으로 축소
         
         # ==========================================
         # 2단계: 입력 파일 경로 설정
         # ==========================================
-        input_csv_path = "/workspace/Fin-Ben/_datasets/0_integration/2_fin_reasoning.csv"
+        input_csv_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "_datasets", "0_integration", "2_fin_reasoning.csv",
+        )
         
         # ==========================================
         # 3단계: 설정 정보 출력

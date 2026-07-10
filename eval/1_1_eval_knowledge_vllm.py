@@ -50,7 +50,7 @@ else:
     print("✓ HuggingFace 토큰 확인됨 (환경 변수에서 로드)")
 
 # HuggingFace 캐시를 workspace로 설정 (모듈 로드 전에 설정해야 함)
-workspace_cache_dir = "/workspace/.cache/huggingface"
+workspace_cache_dir = os.environ.get("HF_HOME") or "/workspace/.cache/huggingface"
 os.makedirs(workspace_cache_dir, exist_ok=True)
 os.environ["HF_HOME"] = workspace_cache_dir
 os.environ["HUGGINGFACE_HUB_CACHE"] = os.path.join(workspace_cache_dir, "hub")
@@ -58,7 +58,7 @@ os.environ["TRANSFORMERS_CACHE"] = os.path.join(workspace_cache_dir, "transforme
 os.environ["HF_DATASETS_CACHE"] = os.path.join(workspace_cache_dir, "datasets")
 
 # vLLM 캐시도 workspace로 설정
-workspace_vllm_cache = "/workspace/.cache/vllm"
+workspace_vllm_cache = os.environ.get("VLLM_CACHE_ROOT") or os.path.expanduser("~/.cache/vllm")
 os.makedirs(workspace_vllm_cache, exist_ok=True)
 
 # 심볼릭 링크 생성 (기존 캐시는 삭제 예정이므로 이동하지 않음)
@@ -163,7 +163,7 @@ def load_model(
             "tensor_parallel_size": torch.cuda.device_count(),
             "gpu_memory_utilization": gpu_memory_utilization,
             "trust_remote_code": True,
-            "dtype": "auto",
+            "dtype": "bfloat16",
         }
         
         if max_model_len is not None:
@@ -278,72 +278,43 @@ def process_csv(
     # 출력 디렉토리 생성
     os.makedirs(os.path.dirname(output_csv_path) if os.path.dirname(output_csv_path) else ".", exist_ok=True)
     
-    # 단일 처리: 각 질문을 하나씩 처리
-    for index, row in tqdm(data.iterrows(), total=total_count, desc=f"처리 중 ({model_name})"):
+    # 배치 처리: 모든 프롬프트를 한 번에 vLLM 에 제출하여 연속 배칭(continuous
+    # batching)으로 처리량을 극대화한다. (문항별 generate 는 단건 디코드라 매우 느림)
+    prompts = []
+    metas = []
+    for index, row in data.iterrows():
         try:
-            _id = row['id']
-            category = row['category']
-            sub_category = row['sub_category']
-            level = row['level']
-            has_table = row['has_table']
-            has_fomula = row['has_fomula']
-            question = row['question']
-            A = row['A']
-            B = row['B']
-            C = row['C']
-            D = row['D']
-            E = row['E']
-            gold = row['gold']
-            
-            prompt = create_prompt(question, A, B, C, D, E)
-
-            # 단일 질문에 대한 답변 생성
-            answer, outputs_text = generate_answer_single(
-                model, prompt, sampling_params
-            )
-
-            # --think 모드: 자유 생성된 raw 출력에서 A~E 추출
-            if think and answer is not None:
-                answer = parse_mcq_answer_freeform(answer)
-
-            # 결과 저장
-            result_row = {
-                'id': _id,
-                'category': category,
-                'sub_category': sub_category,
-                'level': level,
-                'has_table': has_table,
-                'has_fomula': has_fomula,
-                'question': question,
-                'A': A,
-                'B': B,
-                'C': C,
-                'D': D,
-                'E': E,
-                'gold': gold,
-                "answer": answer,
-                # 다른 backend (openrouter / hf_direct / vaetki) 와 컬럼 contract 일치:
-                # answer_structured (think 모드 미사용) + raw_response (전체 vLLM output).
-                # 이렇게 두면 1_2_stats_eval_knowledge.py --llm-judge 가 모든 backend에서 동작.
-                "answer_structured": None,
-                "raw_response": outputs_text,
-            }
-            
-            results.append(result_row)
-            
-            # 진행 상황 출력
-            current_idx = index + 1
-            print(f"  [{current_idx}/{total_count}] ID: {_id} - {model_name}: {answer} (정답: {gold})")
-            success_count += 1
-            
+            metas.append({
+                'id': row['id'],
+                'category': row['category'],
+                'sub_category': row['sub_category'],
+                'level': row['level'],
+                'has_table': row['has_table'],
+                'has_fomula': row['has_fomula'],
+                'question': row['question'],
+                'A': row['A'], 'B': row['B'], 'C': row['C'],
+                'D': row['D'], 'E': row['E'],
+                'gold': row['gold'],
+            })
+            prompts.append(create_prompt(row['question'], row['A'], row['B'], row['C'], row['D'], row['E']))
         except KeyError as e:
             print(f"Error: CSV 파일에 필요한 컬럼이 없습니다: {e}")
             error_ids.append(index)
-            continue
-        except Exception as e:
-            print(f"Error processing row {index}: {e}")
-            error_ids.append(index)
-            continue
+
+    print(f"배치 생성 시작: {len(prompts)}개 프롬프트를 vLLM 에 일괄 제출...")
+    batch_outputs = model.generate(prompts, sampling_params)
+    for meta, out in zip(metas, batch_outputs):
+        answer = out.outputs[0].text.strip()
+        # --think 모드: 자유 생성된 raw 출력에서 A~E 추출
+        if think and answer is not None:
+            answer = parse_mcq_answer_freeform(answer)
+        meta['answer'] = answer
+        # 다른 backend (openrouter / hf_direct / vaetki) 와 컬럼 contract 일치.
+        meta['answer_structured'] = None
+        meta['raw_response'] = str([out])
+        results.append(meta)
+        success_count += 1
+    print(f"  배치 생성 완료: {len(results)}개")
     
     print(f"\n처리 완료: 총 {total_count}개 중 {success_count}개 성공, {len(error_ids)}개 실패")
     if error_ids:
@@ -410,13 +381,16 @@ if __name__ == "__main__":
             # "LGAI-EXAONE/EXAONE-4.0-32B",
             # "LGAI-EXAONE/EXAONE-4.0-1.2B",
         ]
-        
+        import os as _os
+        if _os.environ.get("KFINEVAL_MODELS"):
+            TARGET_MODELS = [m.strip() for m in _os.environ["KFINEVAL_MODELS"].split(",") if m.strip()]
+
         # GPU 메모리 사용률 설정 (필요시 모델별로 다르게 설정 가능)
         GPU_MEMORY_UTILIZATION = 0.9  # 메모리 부족 시 이 값을 높임 (0.7~0.9 권장)
         
         # 최대 시퀀스 길이 설정 (긴 컨텍스트 모델의 경우 메모리 부족 시 줄여야 함)
         # None이면 모델 기본값 사용, 객관식 평가에는 보통 8192~32768이면 충분
-        MAX_MODEL_LEN = 32768  # 262144 → 32768로 줄여서 메모리 사용량 감소
+        MAX_MODEL_LEN = 16384  # WON-Reasoning의 max_position_embeddings=16384 에 맞춤 (MCQ+think 에 충분)
         
         # ==========================================
         # 2단계: 벤치마크 데이터셋 설정
