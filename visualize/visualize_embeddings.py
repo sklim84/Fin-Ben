@@ -242,8 +242,8 @@ def main():
                 linewidth=0.5,
             )
 
-            ax.set_xlabel("t-SNE Dimension 1", fontweight="bold")
-            ax.set_ylabel("t-SNE Dimension 2", fontweight="bold")
+            ax.set_xlabel("t-SNE Dimension 1")
+            ax.set_ylabel("t-SNE Dimension 2")
             # Category legend outside, below the plot; one entry per row so long
             # names never overlap. constrained layout reserves the room, so the
             # legend never collides with the axis or its labels.

@@ -157,7 +157,7 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
     ax.set_xticks(angles)
 
     # 먼저 라벨을 설정합니다.
-    ax.set_xticklabels(labels, fontsize=9, fontweight="bold")
+    ax.set_xticklabels(labels, fontsize=9)
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
@@ -352,7 +352,7 @@ def plot_toxicity_distribution_bar_chart(all_data):
         )
         bottom += data[i]
 
-    ax.set_ylabel("Percentage (%)", fontweight="bold")
+    ax.set_ylabel("Percentage (%)")
     ax.tick_params(axis="x", rotation=90)
     ax.set_ylim(0, 100)
     # Legend below the plot; constrained layout keeps it clear of the rotated
