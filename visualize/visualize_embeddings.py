@@ -10,7 +10,7 @@ from sklearn.manifold import TSNE
 
 # Define base path and file paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-base_path = os.path.join(SCRIPT_DIR, "..", "Fin-Ben_main", "_datasets", "0_integration")
+base_path = os.path.join(SCRIPT_DIR, "..", "_datasets", "0_integration")
 files_info = [
     {
         "filename": "1_fin_knowledge.csv",
@@ -226,14 +226,17 @@ def main():
                 linewidth=0.5,
             )
 
-            plt.title(info["title"], fontsize=18, fontweight="bold", pad=20)
-            plt.xlabel("t-SNE Dimension 1", fontsize=14, fontweight="bold")
-            plt.ylabel("t-SNE Dimension 2", fontsize=14, fontweight="bold")
+            plt.xlabel("t-SNE Dimension 1", fontsize=18, fontweight="bold")
+            plt.ylabel("t-SNE Dimension 2", fontsize=18, fontweight="bold")
+            plt.xticks(fontsize=14)
+            plt.yticks(fontsize=14)
             plt.legend(
-                bbox_to_anchor=(1.05, 1),
-                loc="upper left",
+                bbox_to_anchor=(0.5, -0.12),
+                loc="upper center",
+                ncol=min(n_groups, 5),
                 borderaxespad=0.0,
                 title=info["group_col"].capitalize(),
+                frameon=False,
             )
             plt.tight_layout()
 

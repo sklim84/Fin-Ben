@@ -268,7 +268,7 @@ def plot_category_radar_charts(all_data):
         ncol=6,
         fontsize=12,
         title="Model",
-        frameon=True,
+        frameon=False,
         bbox_to_anchor=(0.5, 0.0),
     )
 
@@ -342,6 +342,7 @@ def plot_toxicity_distribution_bar_chart(all_data):
         ncol=5,
         fontsize=12,
         title="Toxicity Level",
+        frameon=False,
     )
     ax.set_ylim(0, 100)
 

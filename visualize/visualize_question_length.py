@@ -11,7 +11,7 @@ enc = tiktoken.get_encoding("o200k_base")
 
 # Define base path and file paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-base_path = os.path.join(SCRIPT_DIR, "..", "Fin-Ben_main", "_datasets", "0_integration")
+base_path = os.path.join(SCRIPT_DIR, "..", "_datasets", "0_integration")
 files_info = [
     {
         "filename": "1_fin_knowledge.csv",
@@ -231,11 +231,10 @@ for info in files_info:
         )
 
         # Style enhancements
-        plt.title(info["title"], fontsize=16, fontweight="bold", pad=20)
-        plt.xlabel(info["group_col"].capitalize(), fontsize=14, fontweight="bold")
-        plt.ylabel("Token Count (o200k_base)", fontsize=14, fontweight="bold")
-        plt.xticks(rotation=45, ha="right", fontsize=10)
-        plt.yticks(fontsize=10)
+        plt.xlabel(info["group_col"].capitalize(), fontsize=18, fontweight="bold")
+        plt.ylabel("Token Count (o200k_base)", fontsize=18, fontweight="bold")
+        plt.xticks(rotation=45, ha="right", fontsize=14)
+        plt.yticks(fontsize=14)
         plt.grid(axis="y", alpha=0.3, linestyle="--")
 
         plt.tight_layout()
