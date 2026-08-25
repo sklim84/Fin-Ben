@@ -249,7 +249,7 @@ for info in files_info:
 
         # Style enhancements
         plt.xlabel(info["group_col"].capitalize(), fontweight="bold")
-        plt.ylabel("Token Count (o200k_base)", fontweight="bold")
+        plt.ylabel("Token Count", fontweight="bold")
         plt.xticks(rotation=90)
         plt.grid(axis="y", alpha=0.3, linestyle="--")
 
