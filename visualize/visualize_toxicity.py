@@ -201,13 +201,11 @@ def plot_category_radar_charts(all_data):
     categories = [cat["category"] for cat in first_model["by_category"]]
 
     # 1. 전체 피규어 너비를 줄입니다 (32 -> 22)
-    fig = plt.figure(figsize=(22, 6))
+    fig = plt.figure(figsize=(20, 6.5))
     from matplotlib.gridspec import GridSpec
 
-    # 2. wspace를 작게 설정하여 그래프 간 간격을 좁힙니다.
-    # width_ratios에서 범례 공간(마지막 열) 비중을 조절합니다.
-
-    gs = GridSpec(1, 5, figure=fig, width_ratios=[1, 1, 1, 1, 0.5], wspace=0.5)
+    # Four radar panels; the legend is placed horizontally along the bottom.
+    gs = GridSpec(1, 4, figure=fig, wspace=0.5)
 
     csv_data = []
 
@@ -250,10 +248,7 @@ def plot_category_radar_charts(all_data):
             show_legend=False,
         )
 
-    # 범례 영역
-    ax_legend = fig.add_subplot(gs[0, 4])
-    ax_legend.axis("off")
-
+    # Legend placed horizontally along the bottom of the figure.
     legend_handles = []
     for idx, model_name in enumerate(all_data.keys()):
         short_name = MODEL_SHORT_NAMES.get(model_name, model_name)
@@ -266,17 +261,16 @@ def plot_category_radar_charts(all_data):
         )
         legend_handles.append(handle)
 
-    ax_legend.legend(
+    plt.tight_layout(pad=1.0, rect=[0, 0.10, 1, 1])
+    fig.legend(
         handles=legend_handles,
-        loc="center left",
+        loc="lower center",
+        ncol=6,
         fontsize=12,
         title="Model",
         frameon=True,
+        bbox_to_anchor=(0.5, 0.0),
     )
-
-    # 3. tight_layout 대신 구체적인 여백 조정을 사용하거나,
-    # tight_layout 사용 시 pad를 줄입니다.
-    plt.tight_layout(pad=1.0)
 
     plt.savefig("toxicity_category_radar.png", dpi=150, bbox_inches="tight")
     plt.close()
@@ -339,13 +333,15 @@ def plot_toxicity_distribution_bar_chart(all_data):
         )
         bottom += data[i]
 
-    ax.set_title(
-        "Distribution by Toxicity Level", fontsize=25, fontweight="bold", pad=20
-    )
-    ax.set_ylabel("Percentage (%)", fontsize=15, fontweight="bold")
-    ax.tick_params(axis="x", rotation=45, labelsize=10)
+    ax.set_ylabel("Percentage (%)", fontsize=16, fontweight="bold")
+    ax.tick_params(axis="x", rotation=45, labelsize=15)
+    ax.tick_params(axis="y", labelsize=15)
     ax.legend(
-        loc="upper left", bbox_to_anchor=(1, 1), fontsize=10, title="Toxicity Level"
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.32),
+        ncol=5,
+        fontsize=12,
+        title="Toxicity Level",
     )
     ax.set_ylim(0, 100)
 
