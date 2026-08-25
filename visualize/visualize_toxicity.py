@@ -162,7 +162,7 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True, show_la
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
-    ax.tick_params(axis="x", pad=1)
+    ax.tick_params(axis="x", pad=3)
 
     labels_objs = ax.get_xticklabels()
     for i, label in enumerate(labels_objs):
@@ -223,17 +223,17 @@ def plot_category_radar_charts(all_data):
     first_model = list(all_data.values())[0]
     categories = [cat["category"] for cat in first_model["by_category"]]
 
-    # Single compact row; single-letter (A-G) axis labels, defined in the
-    # caption, let the panels sit close together while staying large.
-    fig = plt.figure(figsize=(7.0, 2.6))
+    # 2x2 grid: each radar is large and well separated, with A-G axis labels on
+    # every panel so titles line up.
+    fig = plt.figure(figsize=(7.0, 5.6))
     from matplotlib.gridspec import GridSpec
 
-    gs = GridSpec(1, 4, figure=fig, wspace=0.15)
+    gs = GridSpec(2, 2, figure=fig, wspace=0.45, hspace=0.5)
 
     csv_data = []
 
     for cat_idx, category in enumerate(categories):
-        ax = fig.add_subplot(gs[0, cat_idx], polar=True)
+        ax = fig.add_subplot(gs[cat_idx // 2, cat_idx % 2], polar=True)
         values_dict = {}
 
         for model_name, model_data in all_data.items():
@@ -269,7 +269,6 @@ def plot_category_radar_charts(all_data):
             values_dict,
             f"{CATEGORY_TRANSLATION.get(category, category)}",
             show_legend=False,
-            show_labels=(cat_idx == 0),
         )
 
     # Legend placed horizontally along the bottom of the figure.
