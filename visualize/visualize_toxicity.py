@@ -53,6 +53,21 @@ def setup_korean_font():
 
 setup_korean_font()
 
+# Serif style matched to the paper's other vector figures; sized for placement
+# so the on-page text stays ~8pt.
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.size": 8,
+    "axes.titlesize": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 7.5,
+    "ytick.labelsize": 7.5,
+    "legend.fontsize": 7.5,
+    "axes.linewidth": 0.6,
+    "legend.frameon": False,
+    "pdf.fonttype": 42,
+})
+
 # JSON file paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.join(
@@ -138,11 +153,11 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
     ax.set_xticks(angles)
 
     # 먼저 라벨을 설정합니다.
-    ax.set_xticklabels(labels, fontsize=10, fontweight="bold")
+    ax.set_xticklabels(labels, fontsize=6, fontweight="bold")
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
-    ax.tick_params(axis="x", pad=13)
+    ax.tick_params(axis="x", pad=3)
 
     labels_objs = ax.get_xticklabels()
     for i, label in enumerate(labels_objs):
@@ -182,7 +197,7 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
             color=MODEL_COLORS[idx % len(MODEL_COLORS)],
         )
 
-    ax.set_title(title, fontsize=15, fontweight="bold", pad=40)  # 제목 간격도 약간 넓힘
+    ax.set_title(title, fontsize=8, fontweight="bold", pad=8)
 
     return lines
 
@@ -201,11 +216,11 @@ def plot_category_radar_charts(all_data):
     categories = [cat["category"] for cat in first_model["by_category"]]
 
     # 1. 전체 피규어 너비를 줄입니다 (32 -> 22)
-    fig = plt.figure(figsize=(20, 6.5))
+    fig = plt.figure(figsize=(7.0, 2.7))
     from matplotlib.gridspec import GridSpec
 
     # Four radar panels; the legend is placed horizontally along the bottom.
-    gs = GridSpec(1, 4, figure=fig, wspace=0.5)
+    gs = GridSpec(1, 4, figure=fig, wspace=1.15)
 
     csv_data = []
 
@@ -266,7 +281,7 @@ def plot_category_radar_charts(all_data):
         handles=legend_handles,
         loc="lower center",
         ncol=6,
-        fontsize=12,
+        fontsize=7,
         frameon=False,
         bbox_to_anchor=(0.5, 0.0),
     )
@@ -292,7 +307,7 @@ def plot_toxicity_distribution_bar_chart(all_data):
     first_model = list(all_data.values())[0]
     toxicity_levels = list(first_model["toxicity_levels"].keys())
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(3.4, 3.0), layout="constrained")
 
     tox_short = [
         "Full Defense",
@@ -333,28 +348,15 @@ def plot_toxicity_distribution_bar_chart(all_data):
         )
         bottom += data[i]
 
-    ax.set_ylabel("Percentage (%)", fontsize=16, fontweight="bold")
-    ax.tick_params(axis="x", rotation=45, labelsize=15)
-    ax.tick_params(axis="y", labelsize=15)
-    ax.legend(
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.32),
-        ncol=5,
-        fontsize=12,
-        frameon=False,
-    )
+    ax.set_ylabel("Percentage (%)", fontweight="bold")
+    ax.tick_params(axis="x", rotation=90)
     ax.set_ylim(0, 100)
-
-    plt.tight_layout()
-    plt.savefig(
-        os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.pdf"),
-        bbox_inches="tight",
-    )
-    plt.savefig(
-        os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.png"),
-        dpi=150,
-        bbox_inches="tight",
-    )
+    # Legend below the plot; constrained layout keeps it clear of the rotated
+    # x labels.
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, loc="outside lower center", ncol=3, frameon=False)
+    plt.savefig(os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.pdf"))
+    plt.savefig(os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.png"), dpi=150)
     plt.close()
     print("Saved: toxicity_distribution_bar.pdf / .png")
 

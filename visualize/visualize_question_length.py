@@ -64,6 +64,21 @@ def setup_korean_font():
 
 setup_korean_font()
 
+# Serif style matched to the paper's other vector figures (FraudCenGCL style):
+# sized for single-column placement so the on-page text stays ~8pt.
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.size": 8,
+    "axes.titlesize": 9,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 7.5,
+    "ytick.labelsize": 7.5,
+    "legend.fontsize": 7.5,
+    "axes.linewidth": 0.6,
+    "legend.frameon": False,
+    "pdf.fonttype": 42,
+})
+
 # Colors for boxplots (using a palette similar to visualize_toxicity.py's MODEL_COLORS)
 # Although boxplots aren't by model, using a nice palette enhances aesthetics.
 BOXPLOT_PALETTE = [
@@ -199,8 +214,10 @@ for info in files_info:
             )
             df = df.sort_values(info["group_col"])
 
-        # Create boxplot
-        plt.figure(figsize=(14, 8))  # Larger figure size
+        # Create boxplot (sized for single-column placement, scale ~1.0).
+        # Extra height leaves room for the vertical category labels while
+        # keeping the data band readable.
+        plt.figure(figsize=(3.6, 4.4))
         unique_vals = df[info["group_col"]].unique()
         palette_to_use = (
             BOXPLOT_PALETTE[: len(unique_vals)]
@@ -231,10 +248,9 @@ for info in files_info:
         )
 
         # Style enhancements
-        plt.xlabel(info["group_col"].capitalize(), fontsize=18, fontweight="bold")
-        plt.ylabel("Token Count (o200k_base)", fontsize=18, fontweight="bold")
-        plt.xticks(rotation=45, ha="right", fontsize=14)
-        plt.yticks(fontsize=14)
+        plt.xlabel(info["group_col"].capitalize(), fontweight="bold")
+        plt.ylabel("Token Count (o200k_base)", fontweight="bold")
+        plt.xticks(rotation=90)
         plt.grid(axis="y", alpha=0.3, linestyle="--")
 
         plt.tight_layout()

@@ -153,6 +153,18 @@ def main():
     sns.set_theme(style="whitegrid")
     # Re-apply font after set_theme
     setup_korean_font()
+    # Serif style matched to the paper's other vector figures; sized for
+    # single-column placement so on-page text stays ~8pt.
+    plt.rcParams.update({
+        "font.family": "serif",
+        "font.size": 8,
+        "axes.labelsize": 9,
+        "xtick.labelsize": 7.5,
+        "ytick.labelsize": 7.5,
+        "axes.linewidth": 0.6,
+        "legend.frameon": False,
+        "pdf.fonttype": 42,
+    })
 
     for info in files_info:
         file_path = os.path.join(base_path, info["filename"])
@@ -184,11 +196,11 @@ def main():
             df["x"] = reduced_embeddings[:, 0]
             df["y"] = reduced_embeddings[:, 1]
 
-            # Create scatter plot
-            plt.figure(figsize=(14, 10))
-
-            # Use a high-contrast palette if number of categories is small (<= 8), else default "husl"
+            # Single-column size; add height for the one-per-row legend below.
             n_groups = df[info["group_col"]].nunique()
+            plt.figure(figsize=(3.5, 2.6 + 0.14 * n_groups), layout="constrained")
+
+            # High-contrast palette for few categories, else perceptual "husl".
             if n_groups <= 8:
                 palette = sns.color_palette("Set2", n_groups)
             else:
@@ -214,7 +226,7 @@ def main():
                     ordered=True,
                 )
 
-            sns.scatterplot(
+            ax = sns.scatterplot(
                 data=df,
                 x="x",
                 y="y",
@@ -226,22 +238,27 @@ def main():
                 linewidth=0.5,
             )
 
-            plt.xlabel("t-SNE Dimension 1", fontsize=18, fontweight="bold")
-            plt.ylabel("t-SNE Dimension 2", fontsize=18, fontweight="bold")
-            plt.xticks(fontsize=14)
-            plt.yticks(fontsize=14)
-            plt.legend(
-                bbox_to_anchor=(0.5, -0.12),
-                loc="upper center",
-                ncol=min(n_groups, 5),
-                borderaxespad=0.0,
+            ax.set_xlabel("t-SNE Dimension 1", fontweight="bold")
+            ax.set_ylabel("t-SNE Dimension 2", fontweight="bold")
+            # Category legend outside, below the plot; one entry per row so long
+            # names never overlap. constrained layout reserves the room, so the
+            # legend never collides with the axis or its labels.
+            handles, labels = ax.get_legend_handles_labels()
+            if ax.get_legend() is not None:
+                ax.get_legend().remove()
+            plt.gcf().legend(
+                handles,
+                labels,
+                loc="outside lower center",
+                ncol=1,
+                fontsize=6.5,
                 frameon=False,
+                handletextpad=0.3,
             )
-            plt.tight_layout()
 
             output_path = os.path.join(output_dir, info["output_filename"])
-            plt.savefig(output_path[:-4] + ".pdf", bbox_inches="tight")
-            plt.savefig(output_path, dpi=150, bbox_inches="tight")
+            plt.savefig(output_path[:-4] + ".pdf")
+            plt.savefig(output_path, dpi=150)
             print(f"Saved plot to {output_path}")
             plt.close()
 
