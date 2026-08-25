@@ -145,7 +145,7 @@ def load_all_data():
     return data
 
 
-def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
+def create_radar_chart(ax, labels, values_dict, title, show_legend=True, show_labels=True):
     """Create a radar chart on the given axes."""
     num_vars = len(labels)
     # 각도 계산 (라디안)
@@ -156,8 +156,9 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
     ax.set_theta_direction(-1)  # 시계 방향으로 진행
     ax.set_xticks(angles)
 
-    # 먼저 라벨을 설정합니다.
-    ax.set_xticklabels(labels, fontsize=9)
+    # Axis (A-G) labels are drawn on the first panel only; all panels share the
+    # same axis layout, so repeating them would only shrink the circles.
+    ax.set_xticklabels(labels if show_labels else [""] * len(labels), fontsize=8)
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
@@ -201,7 +202,10 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
             color=MODEL_COLORS[idx % len(MODEL_COLORS)],
         )
 
-    ax.set_title(textwrap.fill(title, 18), fontsize=8, fontweight="bold", pad=6)
+    wrapped_title = (
+        "Fear-\nmongering" if title == "Fearmongering" else textwrap.fill(title, 18)
+    )
+    ax.set_title(wrapped_title, fontsize=8, pad=6)
 
     return lines
 
@@ -221,10 +225,10 @@ def plot_category_radar_charts(all_data):
 
     # Single compact row; single-letter (A-G) axis labels, defined in the
     # caption, let the panels sit close together while staying large.
-    fig = plt.figure(figsize=(7.0, 2.9))
+    fig = plt.figure(figsize=(7.0, 2.6))
     from matplotlib.gridspec import GridSpec
 
-    gs = GridSpec(1, 4, figure=fig, wspace=0.6)
+    gs = GridSpec(1, 4, figure=fig, wspace=0.15)
 
     csv_data = []
 
@@ -265,6 +269,7 @@ def plot_category_radar_charts(all_data):
             values_dict,
             f"{CATEGORY_TRANSLATION.get(category, category)}",
             show_legend=False,
+            show_labels=(cat_idx == 0),
         )
 
     # Legend placed horizontally along the bottom of the figure.
