@@ -196,9 +196,13 @@ def main():
             df["x"] = reduced_embeddings[:, 0]
             df["y"] = reduced_embeddings[:, 1]
 
-            # Single-column size; add height for the one-per-row legend below.
+            # Single-column size; height grows with the number of legend rows.
             n_groups = df[info["group_col"]].nunique()
-            plt.figure(figsize=(3.5, 2.6 + 0.14 * n_groups), layout="constrained")
+            # Two columns when there are many categories to avoid a tall, mostly
+            # empty legend; keep one column only for the very long toxicity names.
+            legend_ncol = 2 if n_groups > 6 else 1
+            legend_rows = -(-n_groups // legend_ncol)
+            plt.figure(figsize=(3.5, 2.6 + 0.14 * legend_rows), layout="constrained")
 
             # High-contrast palette for few categories, else perceptual "husl".
             if n_groups <= 8:
@@ -250,10 +254,11 @@ def main():
                 handles,
                 labels,
                 loc="outside lower center",
-                ncol=1,
-                fontsize=6.5,
+                ncol=legend_ncol,
+                fontsize=6,
                 frameon=False,
                 handletextpad=0.3,
+                columnspacing=1.0,
             )
 
             output_path = os.path.join(output_dir, info["output_filename"])

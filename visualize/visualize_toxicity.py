@@ -153,11 +153,11 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
     ax.set_xticks(angles)
 
     # 먼저 라벨을 설정합니다.
-    ax.set_xticklabels(labels, fontsize=6, fontweight="bold")
+    ax.set_xticklabels(labels, fontsize=7, fontweight="bold")
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
-    ax.tick_params(axis="x", pad=3)
+    ax.tick_params(axis="x", pad=5)
 
     labels_objs = ax.get_xticklabels()
     for i, label in enumerate(labels_objs):
@@ -197,7 +197,7 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True):
             color=MODEL_COLORS[idx % len(MODEL_COLORS)],
         )
 
-    ax.set_title(title, fontsize=8, fontweight="bold", pad=8)
+    ax.set_title(title, fontsize=9, fontweight="bold", pad=8)
 
     return lines
 
@@ -215,17 +215,16 @@ def plot_category_radar_charts(all_data):
     first_model = list(all_data.values())[0]
     categories = [cat["category"] for cat in first_model["by_category"]]
 
-    # 1. 전체 피규어 너비를 줄입니다 (32 -> 22)
-    fig = plt.figure(figsize=(7.0, 2.7))
+    # 2x2 grid so each radar is large enough to read; legend sits below.
+    fig = plt.figure(figsize=(7.0, 5.4))
     from matplotlib.gridspec import GridSpec
 
-    # Four radar panels; the legend is placed horizontally along the bottom.
-    gs = GridSpec(1, 4, figure=fig, wspace=1.15)
+    gs = GridSpec(2, 2, figure=fig, wspace=0.55, hspace=0.5)
 
     csv_data = []
 
     for cat_idx, category in enumerate(categories):
-        ax = fig.add_subplot(gs[0, cat_idx], polar=True)
+        ax = fig.add_subplot(gs[cat_idx // 2, cat_idx % 2], polar=True)
         values_dict = {}
 
         for model_name, model_data in all_data.items():
