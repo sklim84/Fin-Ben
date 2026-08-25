@@ -267,14 +267,14 @@ def plot_category_radar_charts(all_data):
         loc="lower center",
         ncol=6,
         fontsize=12,
-        title="Model",
         frameon=False,
         bbox_to_anchor=(0.5, 0.0),
     )
 
+    plt.savefig("toxicity_category_radar.pdf", bbox_inches="tight")
     plt.savefig("toxicity_category_radar.png", dpi=150, bbox_inches="tight")
     plt.close()
-    print("Saved: toxicity_category_radar.png")
+    print("Saved: toxicity_category_radar.pdf / .png")
 
     # Save to CSV
     csv_file = "toxicity_radar_data.csv"
@@ -341,22 +341,22 @@ def plot_toxicity_distribution_bar_chart(all_data):
         bbox_to_anchor=(0.5, -0.32),
         ncol=5,
         fontsize=12,
-        title="Toxicity Level",
         frameon=False,
     )
     ax.set_ylim(0, 100)
 
     plt.tight_layout()
     plt.savefig(
-        os.path.join(
-            SCRIPT_DIR,
-            "toxicity_distribution_bar.png",
-        ),
+        os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.pdf"),
+        bbox_inches="tight",
+    )
+    plt.savefig(
+        os.path.join(SCRIPT_DIR, "toxicity_distribution_bar.png"),
         dpi=150,
         bbox_inches="tight",
     )
     plt.close()
-    print("Saved: toxicity_distribution_bar.png")
+    print("Saved: toxicity_distribution_bar.pdf / .png")
 
     # Save to CSV
     csv_file = "toxicity_bar_data.csv"

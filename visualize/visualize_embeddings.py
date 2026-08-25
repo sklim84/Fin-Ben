@@ -235,12 +235,12 @@ def main():
                 loc="upper center",
                 ncol=min(n_groups, 5),
                 borderaxespad=0.0,
-                title=info["group_col"].capitalize(),
                 frameon=False,
             )
             plt.tight_layout()
 
             output_path = os.path.join(output_dir, info["output_filename"])
+            plt.savefig(output_path[:-4] + ".pdf", bbox_inches="tight")
             plt.savefig(output_path, dpi=150, bbox_inches="tight")
             print(f"Saved plot to {output_path}")
             plt.close()
