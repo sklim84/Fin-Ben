@@ -223,11 +223,12 @@ def plot_category_radar_charts(all_data):
     first_model = list(all_data.values())[0]
     categories = [cat["category"] for cat in first_model["by_category"]]
 
-    # Compact 1x4 row (original size); A-G axis labels on every panel.
-    fig = plt.figure(figsize=(7.0, 2.9))
+    # 1x4 row wider than the bottom legend so the panels span the full width
+    # (no side margins), with roomy spacing; A-G axis labels on every panel.
+    fig = plt.figure(figsize=(8.5, 2.9))
     from matplotlib.gridspec import GridSpec
 
-    gs = GridSpec(1, 4, figure=fig, wspace=0.4)
+    gs = GridSpec(1, 4, figure=fig, wspace=0.5)
 
     csv_data = []
 
