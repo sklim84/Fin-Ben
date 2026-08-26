@@ -233,7 +233,9 @@ for info in files_info:
         # Horizontal boxplot: categories on the y-axis so long names read
         # left-to-right (wrapped to two lines) without rotation. Height scales
         # with the number of categories.
-        plt.figure(figsize=(3.5, 0.26 * n_cat + 0.55))
+        # Minimum height so few-category panels still give each (wrapped,
+        # multi-line) label enough vertical room to avoid overlap.
+        plt.figure(figsize=(3.5, max(0.26 * n_cat + 0.55, 2.4)))
         ax = sns.boxplot(
             y=info["group_col"],
             x="token_length",
