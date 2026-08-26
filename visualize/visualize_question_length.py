@@ -226,9 +226,8 @@ for info in files_info:
         else:
             category_order = list(df[info["group_col"]].unique())
         n_cat = len(category_order)
-        palette_to_use = (
-            BOXPLOT_PALETTE[:n_cat] if n_cat <= len(BOXPLOT_PALETTE) else None
-        )
+        # Viridis palette to match the paper's other figures.
+        palette_to_use = sns.color_palette("viridis", n_cat)
 
         # Horizontal boxplot: categories on the y-axis so long names read
         # left-to-right (wrapped to two lines) without rotation. Height scales

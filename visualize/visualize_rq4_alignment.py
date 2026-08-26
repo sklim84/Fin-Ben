@@ -109,7 +109,7 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color=plt.cm.viridis(0.25))
     ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color=plt.cm.viridis(0.70))
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=90, fontsize=6.5)
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=6.5)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.legend(loc="upper left", fontsize=7, frameon=False)

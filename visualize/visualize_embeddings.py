@@ -204,11 +204,8 @@ def main():
             legend_rows = -(-n_groups // legend_ncol)
             plt.figure(figsize=(3.5, 2.6 + 0.14 * legend_rows), layout="constrained")
 
-            # High-contrast palette for few categories, else perceptual "husl".
-            if n_groups <= 8:
-                palette = sns.color_palette("Set2", n_groups)
-            else:
-                palette = sns.color_palette("husl", n_groups)
+            # Viridis palette to match the paper's other figures.
+            palette = sns.color_palette("viridis", n_groups)
 
             # Apply category order based on file type
             if info["filename"] == "1_fin_knowledge.csv":
