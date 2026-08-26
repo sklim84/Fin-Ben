@@ -48,7 +48,8 @@ BIN_LABELS = ["Low", "Mid", "High"]
 
 # Shared figure geometry so all four panels render with the same axes box.
 PANEL_FIGSIZE = (2.0, 1.9)
-PANEL_ADJUST = dict(left=0.16, right=0.97, bottom=0.32, top=0.97)
+# Shared margins so all four panels render with the SAME axes box.
+PANEL_ADJUST = dict(left=0.18, right=0.96, bottom=0.40, top=0.93)
 
 
 def _num(series):
@@ -105,15 +106,15 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     fig, ax = plt.subplots(figsize=PANEL_FIGSIZE)
     x = np.arange(len(labels))
     w = 0.38
-    ax.bar(x - w / 2, r_vals, w, label="Pearson r", color="#9bb6e3")
-    ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color="#f5a978")
+    ax.bar(x - w / 2, r_vals, w, label="Pearson r", color=plt.cm.viridis(0.25))
+    ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color=plt.cm.viridis(0.70))
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=90, fontsize=6.5)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.legend(loc="upper left", fontsize=7, frameon=False)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(left=0.17, right=0.97, bottom=0.40, top=0.97)
+    fig.subplots_adjust(**PANEL_ADJUST)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
@@ -151,13 +152,13 @@ def figure_flag_kappa(tox_df, out_stem):
 
     fig, ax = plt.subplots(figsize=PANEL_FIGSIZE)
     x = np.arange(len(labels))
-    ax.bar(x, kappas, color="#2a9d8f", width=0.6)
+    ax.bar(x, kappas, color=plt.cm.viridis(0.45), width=0.6)
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=0, fontsize=8)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(left=0.16, right=0.97, bottom=0.15, top=0.97)
+    fig.subplots_adjust(**PANEL_ADJUST)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
@@ -186,7 +187,7 @@ def _confusion_3x3(df, e1_col, e2_col, llm_col):
 
 
 def _plot_confusion(ax, cm, title=None):
-    ax.imshow(cm, cmap="Blues", aspect="auto")
+    ax.imshow(cm, cmap="viridis", aspect="auto")
     ax.set_xticks(range(3))
     ax.set_yticks(range(3))
     ax.set_xticklabels(BIN_LABELS, fontsize=7.5)
@@ -198,7 +199,7 @@ def _plot_confusion(ax, cm, title=None):
     max_v = cm.max() if cm.size else 0
     for i in range(3):
         for j in range(3):
-            color = "white" if cm[i, j] > max_v * 0.5 else "black"
+            color = "black" if cm[i, j] > max_v * 0.5 else "white"
             ax.text(j, i, str(int(cm[i, j])), ha="center", va="center",
                     color=color, fontsize=9)
 
