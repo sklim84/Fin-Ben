@@ -1,4 +1,5 @@
 import pandas as pd
+import textwrap
 import tiktoken
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -214,18 +215,8 @@ for info in files_info:
             )
             df = df.sort_values(info["group_col"])
 
-        # Create boxplot (sized for single-column placement, scale ~1.0).
-        # Extra height leaves room for the vertical category labels while
-        # keeping the data band readable.
-        plt.figure(figsize=(3.6, 4.4))
-        unique_vals = df[info["group_col"]].unique()
-        palette_to_use = (
-            BOXPLOT_PALETTE[: len(unique_vals)]
-            if len(unique_vals) <= len(BOXPLOT_PALETTE)
-            else None
-        )
-
-        # Determine category order based on file type
+        # Category order and count (drives figure height for the horizontal
+        # layout).
         if info["filename"] == "1_fin_knowledge.csv":
             category_order = FIN_KNOWLEDGE_CATEGORY_ORDER
         elif info["filename"] == "2_fin_reasoning.csv":
@@ -233,11 +224,19 @@ for info in files_info:
         elif info["filename"] == "3_fin_toxicity.csv":
             category_order = FIN_TOXICITY_CATEGORY_ORDER
         else:
-            category_order = None
+            category_order = list(df[info["group_col"]].unique())
+        n_cat = len(category_order)
+        palette_to_use = (
+            BOXPLOT_PALETTE[:n_cat] if n_cat <= len(BOXPLOT_PALETTE) else None
+        )
 
-        sns.boxplot(
-            x=info["group_col"],
-            y="token_length",
+        # Horizontal boxplot: categories on the y-axis so long names read
+        # left-to-right (wrapped to two lines) without rotation. Height scales
+        # with the number of categories.
+        plt.figure(figsize=(3.5, 0.34 * n_cat + 0.8))
+        ax = sns.boxplot(
+            y=info["group_col"],
+            x="token_length",
             data=df,
             order=category_order,
             hue=info["group_col"],
@@ -246,12 +245,12 @@ for info in files_info:
             legend=False,
             dodge=False,
         )
-
-        # Style enhancements
-        plt.xlabel(info["group_col"].capitalize())
-        plt.ylabel("Token Count")
-        plt.xticks(rotation=90)
-        plt.grid(axis="y", alpha=0.3, linestyle="--")
+        ax.set_yticklabels(
+            [textwrap.fill(t.get_text(), 20) for t in ax.get_yticklabels()]
+        )
+        plt.xlabel("Token Count")
+        plt.ylabel("")
+        plt.grid(axis="x", alpha=0.3, linestyle="--")
 
         plt.tight_layout()
 

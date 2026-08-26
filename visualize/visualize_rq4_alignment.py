@@ -23,6 +23,20 @@ import matplotlib.pyplot as plt
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import cohen_kappa_score
 
+# Serif style matched to the paper's other vector figures; panels are sized to
+# their placement (~0.245 textwidth) so on-page text stays ~7-8pt.
+plt.rcParams.update({
+    "font.family": "serif",
+    "font.size": 8,
+    "axes.labelsize": 8,
+    "xtick.labelsize": 7.5,
+    "ytick.labelsize": 7.5,
+    "legend.fontsize": 7,
+    "axes.linewidth": 0.6,
+    "legend.frameon": False,
+    "pdf.fonttype": 42,
+})
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESULTS_DIR = SCRIPT_DIR.parent / "eval" / "_results"
@@ -33,7 +47,7 @@ BIN_EDGES = [0.5, 3.5, 6.5, 10.5]
 BIN_LABELS = ["Low", "Mid", "High"]
 
 # Shared figure geometry so all four panels render with the same axes box.
-PANEL_FIGSIZE = (8, 7.2)
+PANEL_FIGSIZE = (2.0, 1.9)
 PANEL_ADJUST = dict(left=0.16, right=0.97, bottom=0.32, top=0.97)
 
 
@@ -94,10 +108,10 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color="#9bb6e3")
     ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color="#f5a978")
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=18)
-    ax.tick_params(axis="y", labelsize=18)
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+    ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
-    ax.legend(loc="upper left", fontsize=18, frameon=True)
+    ax.legend(loc="upper left", fontsize=7, frameon=False)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
     fig.subplots_adjust(**PANEL_ADJUST)
 
@@ -139,8 +153,8 @@ def figure_flag_kappa(tox_df, out_stem):
     x = np.arange(len(labels))
     ax.bar(x, kappas, color="#2a9d8f", width=0.6)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=18)
-    ax.tick_params(axis="y", labelsize=18)
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+    ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
     fig.subplots_adjust(**PANEL_ADJUST)
@@ -175,18 +189,18 @@ def _plot_confusion(ax, cm, title=None):
     ax.imshow(cm, cmap="Blues", aspect="auto")
     ax.set_xticks(range(3))
     ax.set_yticks(range(3))
-    ax.set_xticklabels(BIN_LABELS, fontsize=18)
-    ax.set_yticklabels(BIN_LABELS, fontsize=18)
-    ax.set_xlabel("LLM Prediction", fontsize=18)
-    ax.set_ylabel("Human Score", fontsize=18)
+    ax.set_xticklabels(BIN_LABELS, fontsize=7.5)
+    ax.set_yticklabels(BIN_LABELS, fontsize=7.5)
+    ax.set_xlabel("LLM Prediction", fontsize=8)
+    ax.set_ylabel("Human Score", fontsize=8)
     if title:
-        ax.set_title(title, fontsize=13, fontweight="bold")
+        ax.set_title(title, fontsize=8)
     max_v = cm.max() if cm.size else 0
     for i in range(3):
         for j in range(3):
             color = "white" if cm[i, j] > max_v * 0.5 else "black"
             ax.text(j, i, str(int(cm[i, j])), ha="center", va="center",
-                    color=color, fontsize=22)
+                    color=color, fontsize=9)
 
 
 def _save_single_confusion(cm, out_stem):
