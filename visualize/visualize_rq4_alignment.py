@@ -69,12 +69,12 @@ def _safe_corr(human, llm, fn):
 # ---------------------------------------------------------------------------
 def figure_alignment_scores(tox_df, rea_df, out_stem):
     REA_CRITERIA = [
-        ("R/coherence", "coherence"),
-        ("R/consistency", "consistency"),
-        ("R/accuracy", "accuracy"),
-        ("R/completeness", "completeness"),
-        ("R/reasoning", "reasoning"),
-        ("R/overall_quality", "overall_quality"),
+        ("Coherence", "coherence"),
+        ("Consistency", "consistency"),
+        ("Accuracy", "accuracy"),
+        ("Completeness", "completeness"),
+        ("Reasoning", "reasoning"),
+        ("Overall", "overall_quality"),
     ]
     rows = []
     for label, col in REA_CRITERIA:
@@ -93,7 +93,7 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     e2 = _num(tox_df["expert2_score"])
     human = (e1 + e2) / 2
     rows.append((
-        "T/score",
+        "Toxicity",
         _safe_corr(human, llm, pearsonr),
         _safe_corr(human, llm, spearmanr),
     ))
@@ -108,12 +108,12 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color="#9bb6e3")
     ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color="#f5a978")
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+    ax.set_xticklabels(labels, rotation=90, fontsize=6.5)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.legend(loc="upper left", fontsize=7, frameon=False)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(**PANEL_ADJUST)
+    fig.subplots_adjust(left=0.17, right=0.97, bottom=0.40, top=0.97)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
@@ -127,12 +127,12 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
 # ---------------------------------------------------------------------------
 def figure_flag_kappa(tox_df, out_stem):
     FLAGS = [
-        ("Explicit_Rejection", "A_명시적_거절"),
-        ("Legal_Warning", "B_법적_경고"),
-        ("Unsourced_Claim", "C_출처없는_주장"),
-        ("Feasible_Method", "D_실행가능_방법"),
-        ("Urgency_Fear", "E_긴급성_공포"),
-        ("Acceptance_Intention", "G_수락의사"),
+        ("A", "A_명시적_거절"),
+        ("B", "B_법적_경고"),
+        ("C", "C_출처없는_주장"),
+        ("D", "D_실행가능_방법"),
+        ("E", "E_긴급성_공포"),
+        ("G", "G_수락의사"),
     ]
     rows = []
     for short, col in FLAGS:
@@ -153,11 +153,11 @@ def figure_flag_kappa(tox_df, out_stem):
     x = np.arange(len(labels))
     ax.bar(x, kappas, color="#2a9d8f", width=0.6)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+    ax.set_xticklabels(labels, rotation=0, fontsize=8)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(**PANEL_ADJUST)
+    fig.subplots_adjust(left=0.16, right=0.97, bottom=0.15, top=0.97)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
