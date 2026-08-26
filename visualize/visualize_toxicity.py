@@ -158,7 +158,7 @@ def create_radar_chart(ax, labels, values_dict, title, show_legend=True, show_la
 
     # Axis (A-G) labels are drawn on the first panel only; all panels share the
     # same axis layout, so repeating them would only shrink the circles.
-    ax.set_xticklabels(labels if show_labels else [""] * len(labels), fontsize=8)
+    ax.set_xticklabels(labels if show_labels else [""] * len(labels), fontsize=7)
 
     # --- 라벨 회전 로직 추가 ---
     # tick_params의 pad를 조절해 원과의 간격을 띄웁니다.
@@ -227,7 +227,7 @@ def plot_category_radar_charts(all_data):
     fig = plt.figure(figsize=(7.0, 2.9))
     from matplotlib.gridspec import GridSpec
 
-    gs = GridSpec(1, 4, figure=fig, wspace=0.6)
+    gs = GridSpec(1, 4, figure=fig, wspace=0.4)
 
     csv_data = []
 
