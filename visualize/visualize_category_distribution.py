@@ -104,7 +104,7 @@ def main():
         labels=inner_labels, labeldistance=0.66, rotatelabels=False,
         startangle=90, counterclock=False,
         wedgeprops=dict(width=W_IN, edgecolor="white", linewidth=2.0),
-        textprops=dict(fontsize=18, fontweight="bold", ha="center", va="center"),
+        textprops=dict(fontsize=21, fontweight="bold", ha="center", va="center"),
     )
     for t, col in zip(inner_texts, inner_colors):
         t.set_color(_text_on(col))
@@ -121,20 +121,22 @@ def main():
         if width >= WIDE_DEG:
             wrapped = "\n".join(textwrap.wrap(lbl, width=16))
             ax.text(x, y, wrapped, ha="center", va="center",
-                    fontsize=13, color=tcol, linespacing=1.0)
+                    fontsize=16, color=tcol, linespacing=1.0)
         else:
             # thin wedge: radial text INSIDE the wedge (reads along the radius),
             # wrapped to short lines and shrunk so it fits within the band.
             rot = mid - 180 if 90 < (mid % 360) < 270 else mid
-            fs = 10 if width >= 10 else 9
+            fs = 12 if width >= 10 else 11
             wrapped = "\n".join(textwrap.wrap(lbl, width=13))
             ax.text(x, y, wrapped, ha="center", va="center", rotation=rot,
                     rotation_mode="anchor", fontsize=fs, color=tcol,
                     linespacing=0.9)
 
     ax.set(aspect="equal")
-    ax.set_xlim(-1.2, 1.2)
-    ax.set_ylim(-1.2, 1.2)
+    # Tight limits so the ring fills the frame (nothing is drawn beyond r=1),
+    # which maximizes the on-page size of the in-wedge labels at column width.
+    ax.set_xlim(-1.03, 1.03)
+    ax.set_ylim(-1.03, 1.03)
     fig.tight_layout()
     for ext in ("pdf", "png"):
         out = HERE / f"stats_simple_v2.{ext}"
