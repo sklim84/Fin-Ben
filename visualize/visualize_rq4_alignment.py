@@ -112,9 +112,14 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=6.5)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
-    ax.legend(loc="upper left", fontsize=7, frameon=False)
+    # Legend below the axis (clear of the 45-degree tick labels) instead of
+    # overlapping the bars at upper-left.
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.58), ncol=2,
+              fontsize=6.5, frameon=False, columnspacing=1.2, handletextpad=0.4)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(**PANEL_ADJUST)
+    # Extra bottom room for the below-axis legend (scores panel only); same outer
+    # figure size as the kappa panel so the two stay level side by side.
+    fig.subplots_adjust(left=0.18, right=0.96, bottom=0.52, top=0.93)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
