@@ -20,6 +20,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import cohen_kappa_score
 
@@ -51,6 +52,21 @@ PANEL_FIGSIZE = (2.0, 1.9)
 # Shared margins so all four panels render with the SAME axes box.
 PANEL_ADJUST = dict(left=0.18, right=0.96, bottom=0.40, top=0.93)
 
+# Figure 5 panels (Scores + Flag kappa) share ONE axes box so the two bar
+# panels line up with no vertical-height mismatch. The Scores panel needs a
+# two-series legend; it goes in the reserved TOP strip (top=0.80) rather than
+# below the axis, so it neither overlaps the x-tick labels nor shortens the
+# plot. The Kappa panel reuses the identical box (its top strip is just empty
+# headroom), keeping the two axes boxes pixel-identical side by side.
+FIG5_ADJUST = dict(left=0.18, right=0.96, bottom=0.24, top=0.80)
+
+# Brighter viridis for the Figure 6 confusion heatmaps: same paper-wide palette,
+# but the darkest cells sit at viridis(0.32) (a legible teal) instead of the
+# near-black viridis(0.0), so low-count cells read as color rather than mud.
+CONF_CMAP = LinearSegmentedColormap.from_list(
+    "viridis_bright", plt.cm.viridis(np.linspace(0.32, 1.0, 256))
+)
+
 
 def _num(series):
     return pd.to_numeric(series, errors="coerce")
@@ -70,12 +86,12 @@ def _safe_corr(human, llm, fn):
 # ---------------------------------------------------------------------------
 def figure_alignment_scores(tox_df, rea_df, out_stem):
     REA_CRITERIA = [
-        ("Coherence", "coherence"),
-        ("Consistency", "consistency"),
-        ("Accuracy", "accuracy"),
-        ("Completeness", "completeness"),
-        ("Reasoning", "reasoning"),
-        ("Overall", "overall_quality"),
+        ("Coh.", "coherence"),
+        ("Cons.", "consistency"),
+        ("Acc.", "accuracy"),
+        ("Comp.", "completeness"),
+        ("Reas.", "reasoning"),
+        ("Ovr.", "overall_quality"),
     ]
     rows = []
     for label, col in REA_CRITERIA:
@@ -94,7 +110,7 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     e2 = _num(tox_df["expert2_score"])
     human = (e1 + e2) / 2
     rows.append((
-        "Toxicity",
+        "Tox.",
         _safe_corr(human, llm, pearsonr),
         _safe_corr(human, llm, spearmanr),
     ))
@@ -109,17 +125,19 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color=plt.cm.viridis(0.25))
     ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color=plt.cm.viridis(0.70))
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=6.5)
+    # Abbreviated criterion labels (matching Appendix Table 36) so a gentle 30-deg
+    # rotation replaces the deep 45-deg footprint of the spelled-out names.
+    ax.set_xticklabels(labels, rotation=30, ha="right", fontsize=7)
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
-    # Legend below the axis (clear of the 45-degree tick labels) instead of
-    # overlapping the bars at upper-left.
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.58), ncol=2,
-              fontsize=6.5, frameon=False, columnspacing=1.2, handletextpad=0.4)
+    # Legend in the reserved TOP strip (above the axes): it clears the x-tick
+    # labels entirely and, unlike a below-axis legend, does not shorten the plot
+    # box -- so this panel keeps the SAME axes height as the kappa panel.
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
+              fontsize=6.5, frameon=False, columnspacing=1.2, handletextpad=0.4,
+              borderaxespad=0.2)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    # Extra bottom room for the below-axis legend (scores panel only); same outer
-    # figure size as the kappa panel so the two stay level side by side.
-    fig.subplots_adjust(left=0.18, right=0.96, bottom=0.52, top=0.93)
+    fig.subplots_adjust(**FIG5_ADJUST)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
@@ -163,7 +181,9 @@ def figure_flag_kappa(tox_df, out_stem):
     ax.tick_params(axis="y", labelsize=7.5)
     ax.set_ylim(0, 1.05)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    fig.subplots_adjust(**PANEL_ADJUST)
+    # Same axes box as the Scores panel so the two Figure 5 bar plots line up
+    # in height (its top strip is empty headroom where Scores holds its legend).
+    fig.subplots_adjust(**FIG5_ADJUST)
 
     plt.savefig(f"{out_stem}.png", dpi=150)
     plt.savefig(f"{out_stem}.pdf")
@@ -192,7 +212,7 @@ def _confusion_3x3(df, e1_col, e2_col, llm_col):
 
 
 def _plot_confusion(ax, cm, title=None):
-    ax.imshow(cm, cmap="viridis", aspect="auto")
+    im = ax.imshow(cm, cmap=CONF_CMAP, aspect="auto")
     ax.set_xticks(range(3))
     ax.set_yticks(range(3))
     ax.set_xticklabels(BIN_LABELS, fontsize=7.5)
@@ -201,10 +221,14 @@ def _plot_confusion(ax, cm, title=None):
     ax.set_ylabel("Human Score", fontsize=8)
     if title:
         ax.set_title(title, fontsize=8)
-    max_v = cm.max() if cm.size else 0
+    # Cell-text color from the cell's own fill luminance (dark text on the bright
+    # yellow-green cells, white on the darker teal ones) -- robust now that the
+    # brighter cmap makes a fixed count threshold unreliable.
     for i in range(3):
         for j in range(3):
-            color = "black" if cm[i, j] > max_v * 0.5 else "white"
+            r, g, b = CONF_CMAP(im.norm(cm[i, j]))[:3]
+            lum = 0.299 * r + 0.587 * g + 0.114 * b
+            color = "0.12" if lum > 0.6 else "white"
             ax.text(j, i, str(int(cm[i, j])), ha="center", va="center",
                     color=color, fontsize=9)
 
